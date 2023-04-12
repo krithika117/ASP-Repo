@@ -1,0 +1,20 @@
+﻿@page
+@model WebApplication2.Pages.Books.UpdateBookModel
+@{
+    <h1>Update</h1>
+     <form method="post">
+    <input type ="hidden"  name="id" value="@Model.book.book_code"/>
+    <div class="row mb-2">
+        <label class= "col-sm-12 col-form--label">Book Code</label>
+        <div class= "col-sm-4">
+            <input type="text" class ="form-control" name="book_code_input" required/>
+        </div>
+    </div>
+
+        <div class="row mb-2">
+            <input type="submit" class="form-control btn btn-primary" value="Submit" />
+        </div>
+
+
+    </form>
+}

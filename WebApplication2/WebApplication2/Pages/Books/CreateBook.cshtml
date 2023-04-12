@@ -1,0 +1,106 @@
+﻿@page
+@model WebApplication2.Pages.Books.CreateBookModel
+@{
+    <h2>Create a book</h2>
+    @if (Model.errorMessage.Length > 0)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="error-msg">
+        @Model.errorMessage
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick = "document.getElementById('error-msg').remove();">x
+            </button>
+        </div>
+
+    }
+
+    
+
+    <form method="post">
+    
+    <div class="row mb-2">
+        <label class= "col-sm-12 col-form--label">Book Code</label>
+        <div class= "col-sm-4">
+            <input type="text" class ="form-control" name="book_code" required/>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <label class= "col-sm-12 col-form--label">Book Title</label>
+        <div class="col-sm-4">
+                <input type="text" class="form-control" name="book_title" required />
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Book Category</label>
+        <div class="col-sm-4">
+                <input type="text" class="form-control" name="category" required />
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Book Author</label>
+        <div class="col-sm-4">
+                <input type="text" class="form-control" name="author" required />
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Book Publication</label>
+        <div class="col-sm-4">
+                <input type="text" class="form-control" name="publication" required />
+        </div>
+    </div>
+
+     <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Book Publication Date</label>
+        <div class="col-sm-4">
+                <input type="date" class="form-control" name="publish_date" required />
+        </div>
+    </div>
+    
+    <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Book edition</label>
+        <div class="col-sm-4">
+                <input type="number" class="form-control" name="book_edition" required />
+        </div>
+    </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-12 col-form--label">Book price</label>
+            <div class="col-sm-4">
+                <input type="number" class="form-control" name="price" required />
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-12 col-form--label">Rack num</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="rack_num" required />
+            </div>
+        </div>
+
+
+        <div class="row mb-2">
+            <label class="col-sm-12 col-form--label">Book Arrival Date</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" name="date_arrival" required />
+            </div>
+        </div>
+    
+        
+    <div class="row mb-2">
+        <label class="col-sm-12 col-form--label">Supplier ID</label>
+        <div class="col-sm-4">
+                <input type="text" class="form-control" name="supplier_id" required />
+        </div>
+    </div>
+
+        <div class="row mb-2">
+            <input type="submit" class="form-control btn btn-primary" value="Submit"/>
+        </div>
+
+    </form>
+
+
+
+}
