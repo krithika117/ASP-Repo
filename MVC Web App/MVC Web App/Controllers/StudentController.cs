@@ -6,7 +6,10 @@ namespace MVC_Web_App.Controllers
 {
 
     public class StudentController : Controller
-    {
+    {IConfiguration configuration;
+        public StudentController(IConfiguration configuration) { 
+            this.configuration = configuration;
+        }
         public IActionResult Student()
         {
             return View();
@@ -16,31 +19,42 @@ namespace MVC_Web_App.Controllers
         public string info = "Hello student info";
         public IActionResult Index()
         {
+            
+                var connectionString = configuration.GetConnectionString("TestDB");
+                SqlConnection conn = new SqlConnection();
+                conn.ConnectionString = connectionString;
 
-            string connectionString = "Data Source=1GMYTP2;Initial Catalog=TestDB; Integrated Security=True; Encrypt=False";
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM dbo.employees";
 
-            SqlConnection conn = new SqlConnection(connectionString);
+                SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        StudentModel s1 = new();
+                        s1.employee_id = reader.GetInt32(0);
+                        s1.employee_name = reader.GetString(1);
+                    try
+                    {
 
-            conn.Open();
-            SqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM dbo.employees";
+                        s1.department_id = (reader["department_id"] == null) ? (1) : (reader.GetInt32(2));
+                    }
+                    catch (Exception ex) 
+                    { 
+                        Console.WriteLine(ex); 
+                    }
 
-            SqlDataReader reader = cmd.ExecuteReader();
+                    students.Add(s1);
+                    } 
 
-            while (reader.Read())
-            {
-                StudentModel s1 = new StudentModel();
-                s1.employee_id = reader.GetInt32((0));
-                s1.employee_name = "" + reader[1];
 
-                students.Add(s1);
-            }
-
-            ViewBag.students = students;
             ViewBag.info = info;
 
+            
+            ViewBag.students = students;
 
             return View();
+
         }
     }
 }

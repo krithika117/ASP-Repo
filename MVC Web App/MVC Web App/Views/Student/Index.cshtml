@@ -12,6 +12,7 @@
                 <tr>
                     <th>Employee ID</th>
                     <th>Employee Name</th>
+                    <th>Department Number</th>
                 </tr>
         @foreach (StudentModel book in ViewBag.students)
         {
@@ -23,10 +24,13 @@
                 <td>
                     @book.employee_name
                 </td>
+                <td>
+                    @book.department_id
+                </td>
 
             </tr>
         }
-                    </table>
+       </table>
 
     </div>
 </div>

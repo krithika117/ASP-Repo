@@ -1,0 +1,70 @@
+﻿@{
+	ViewData["Title"] = "Admin";
+}
+
+<div id="message">
+	@if (TempData["message"] != null && TempData["message"].ToString().Length > 0)
+	{
+		<div class="alert @TempData["messageType"]">
+			@TempData["message"]
+			<button class="btn-close" onclick="document.getElementById('message').innerHTML=''"></button>
+		</div>
+	}
+</div>
+
+<script>
+	function deleteJob(id) {
+		if (confirm("Are you sure you want to delete?")) {
+			location.href = "Delete?id=" + id;
+		}
+	}
+</script>
+<a href="/Admin/AddJob" class="btn btn-primary">Add Job</a>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Category</th>
+			<th>Sub-category</th>
+			<th>Salary</th>
+			<th>Deadline</th>
+			<th>Edit</th>
+			<th>Delete</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var job in (List<JobModel>)ViewBag.jobs)
+		{
+			if (ViewBag.editID != null && ViewBag.editID == job.Id)
+			{
+				<form method="post" action="Edit">
+				<tr>
+					<td><input type="hidden" name="id" value="@job.Id" />@job.Id</td>
+					<td><input name="name" value="@job.Name"></td>
+					<td><input name="category" value="@job.Category"></td>
+					<td><input name="subcategory" value="@job.SubCategory"></td>
+					<td><input name="salary" value="@job.Salary"></td>
+					<td><input type="date" name="deadline" value="@job.DeadLine.ToString("yyyy-MM-dd")"></td>
+					<td><button class="btn btn-primary" type="submit">Update</button></td>
+					<td><a class="btn btn-danger" href="Admin">Cancel</a></td>
+				</tr>
+				</form>
+			}
+			else
+			{
+				<tr>
+					<td>@job.Id</td>
+					<td>@job.Name</td>
+					<td>@job.Category</td>
+					<td>@job.SubCategory</td>
+					<td>@job.Salary</td>
+					<td>@job.DeadLine.ToString("yyyy-dd-MM")</td>
+					<td><a class="btn btn-primary" href="Admin?editid=@job.Id">Edit</a></td>
+					<td><button class="btn btn-danger" onclick="deleteJob(@job.Id)">Delete</button></td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

@@ -1,0 +1,46 @@
+﻿@{
+    <h1>Search</h1>
+    <br />
+
+    <form id="search-form" class="form-inline">
+        <div class="form-group shadow bg-light">
+            <input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+        </div>
+    </form>
+    <br />
+
+    <div id="search-results">
+         
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var job in ViewBag.jobs)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">@job.Name</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">@job.Category - @job.SubCategory</h6>
+                                <p class="card-text">Salary: @job.Salary</p>
+                                <p class="card-text">Deadline: @job.DeadLine.ToShortDateString()</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+    </div>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search').on('input', function () {
+            $.ajax({
+                url: '@Url.Action("Search", "Search")',
+                data: $('#search-form').serialize(),
+                method: 'POST',
+                success: function (data) {
+                    $('#search-results').html(data);
+                }
+            });
+        });
+    });
+</script>
