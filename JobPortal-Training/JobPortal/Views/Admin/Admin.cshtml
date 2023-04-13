@@ -37,21 +37,53 @@
 	<tbody>
 		@foreach (var job in (List<JobModel>)ViewBag.jobs)
 		{
-			if (ViewBag.editID != null && ViewBag.editID == job.Id)
-			{
-				<form method="post" action="Edit">
-				<tr>
-					<td><input type="hidden" name="id" value="@job.Id" />@job.Id</td>
-					<td><input name="name" value="@job.Name"></td>
-					<td><input name="category" value="@job.Category"></td>
-					<td><input name="subcategory" value="@job.SubCategory"></td>
-					<td><input name="salary" value="@job.Salary"></td>
-					<td><input type="date" name="deadline" value="@job.DeadLine.ToString("yyyy-MM-dd")"></td>
-					<td><button class="btn btn-primary" type="submit">Update</button></td>
-					<td><a class="btn btn-danger" href="Admin">Cancel</a></td>
-				</tr>
-				</form>
+			@if (ViewBag.editID != null && ViewBag.editID == job.Id)
+{
+    <form method="post" action="Edit">
+    <tr>
+        <td><input type="hidden" name="id" value="@job.Id" />@job.Id</td>
+        <td><input name="name" value="@job.Name"></td>
+        <td>
+						<select class="form-control" name="category" id="category" required>
+							<option value="@job.Category" selected disabled>@job.Category</option>
+							<option value="IT">IT</option>
+							<option value="Outreach">Outreach</option>
+						</select>
+					</td>
+        <td>
+                        <select class="form-control" name="subcategory" id="subcategory" required>
+							<option value="@job.SubCategory" selected disabled>@job.SubCategory</option>
+                        </select>
+                    </td>
+        <td><input name="salary" value="@job.Salary"></td>
+        <td><input type="date" name="deadline" value="@job.DeadLine.ToString("yyyy-MM-dd")"></td>
+        <td><button class="btn btn-primary" type="submit">Update</button></td>
+        <td><a class="btn btn-danger" href="Admin">Cancel</a></td>
+    </tr>
+    </form>
+
+
+				<script>
+					var categoryObject = {
+						"IT": ["Dev", "Testing", "UI/UX"],
+						"Outreach": ["Promotion", "Graphic Design"]
+					};
+
+					var categorySel = document.getElementById("category");
+					var subcategorySel = document.getElementById("subcategory");
+
+					categorySel.onchange = function () {
+						// empty sub-category dropdown
+						subcategorySel.length = 1;
+						// display correct values
+						var z = categoryObject[this.value];
+						for (var i = 0; i < z.length; i++) {
+							subcategorySel.options[subcategorySel.options.length] = new Option(z[i], z[i]);
+						}
+					}
+				</script>
 			}
+
 			else
 			{
 				<tr>
