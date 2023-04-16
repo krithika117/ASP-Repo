@@ -4,7 +4,7 @@
         {
             <div class="form-group row col-2"  id="divManagerList">
                 <label>Select Manager</label>
-                @Html.DropDownList("managerId", new SelectList(ViewBag.ManagerList, "Id", "Name"), new { @class = "form-control select2" })
+                @Html.DropDownList("managerId", new SelectList(ViewBag.ManagerList, "Id", "Name"), new { @class = "form-control select2" , @onchange = "ManagerChange()"})
             </div>
 
         }

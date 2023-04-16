@@ -3,23 +3,12 @@ $(document).ready(function () {
     $("#appointmentDate").kendoDateTimePicker({
         value: new Date(),
         dateInput: false,
-        format: "MM/dd/yyyy HH:mm:ss"
+        format: "dd/MM/yyyy HH:mm:ss"
     });
 
     InitializeCalendar();
 });
-
-function DateFormatter(inputDate){
-    var date = new Date(inputDate);
-    var formattedDate = date.getFullYear() + '-' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-        ('0' + date.getDate()).slice(-2) + 'T' +
-        ('0' + date.getHours()).slice(-2) + ':' +
-        ('0' + date.getMinutes()).slice(-2) + ':' +
-        ('0' + date.getSeconds()).slice(-2);
-
-    console.log(formattedDate);
-}
+var calendar;
 
 function InitializeCalendar() {
     try {
@@ -64,12 +53,8 @@ function InitializeCalendar() {
                                 console.log(events)
 
                             }
-                            try {
                                 successCallback(events);
-                            }
-                            catch (err) {
-                                console.log(err);
-                            }
+                          
                         },
                         error: function (xhr) {
                             console.log("Error")
@@ -91,14 +76,72 @@ function InitializeCalendar() {
 
 }
 
+function getEventDetailsByEventId(info) {
+    $.ajax({
+        url: routeURL + '/api/Appointment/GetCalendarDataById/' + info.id,
+        type: 'GET',
+        dataType: 'JSON',
+        success: function (response) {
+
+            if (response.status === 1 && response.dataenum !== undefined) {
+                onShowModal(response.dataenum, true);
+            }
+            successCallback(events);
+        },
+        error: function (xhr) {
+            $.notify("Error", "error");
+        }
+    });
+}
+
 
 
 function onShowModal(obj, isEventDetail) {
-    //console.log("Triggered")
+    if (isEventDetail != null) {
+
+        $("#title").val(obj.title);
+        $("#description").val(obj.description);
+        $("#appointmentDate").val(obj.startDate);
+        $("#duration").val(obj.duration);
+        $("#managerId").val(obj.managerId);
+        $("#associateId").val(obj.associateId);
+        $("#id").val(obj.id);
+        $("#lblAssociateName").html(obj.associateName);
+        $("#lblManagerName").html(obj.managerName);
+        if (obj.isManagerApproved) {
+            $("#lblStatus").html('Approved');
+            $("#btnConfirm").addClass("d-none");
+            $("#btnSubmit").addClass("d-none");
+        }
+        else {
+            $("#lblStatus").html('Pending');
+            $("#btnConfirm").removeClass("d-none");
+            $("#btnSubmit").removeClass("d-none");
+        }
+        $("#btnDelete").removeClass("d-none");
+
+
+    }
+    else {
+            $("#appointmentDate").val(obj.startStr + " " + new moment().format("hh:mm A"));
+            $("#id").val(0);
+            $("#btnDelete").addClass("d-none");
+            $("#btnSubmit").removeClass("d-none");
+    }
     $("#appointmentInput").modal("show");
+
+    
 }
+
 function onCloseModal(obj, isEventDetail) {
     //console.log("Triggered")
+    $("#appointmentForm")[0].reset();
+    $("#id").val(0);
+    $("#title").val('');
+    $("#description").val('');
+    $("#appointmentDate").val('');
+    $("#duration").val('');
+    $("#associateId").val('');
     $("#appointmentInput").modal("hide");
 }
 
@@ -161,4 +204,58 @@ function checkValidation() {
     }
     return isValid;
 
+}
+
+function ManagerChange() {
+    calendar.refetchEvents();
+}
+
+function onDeleteAppointment() {
+    var id = parseInt($("#id").val());
+    $.ajax({
+        url: routeURL + '/api/Appointment/DeleteAppointment/' + id,
+        type: 'GET',
+        dataType: 'JSON',
+        success: function (response) {
+
+            if (response.status === 1) {
+                $.notify(response.message, "success");
+                calendar.refetchEvents();
+                onCloseModal();
+            }
+            else {
+
+                $.notify(response.message, "error");
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr)
+            $.notify("Error", "error");
+        }
+    });
+}
+
+function onConfirm() {
+    var id = parseInt($("#id").val());
+    $.ajax({
+        url: routeURL + '/api/Appointment/ConfirmAppointment/' + id,
+        type: 'GET',
+        dataType: 'JSON',
+        success: function (response) {
+
+            if (response.status === 1) {
+                $.notify(response.message, "success");
+                calendar.refetchEvents();
+                onCloseModal();
+            }
+            else {
+
+                $.notify(response.message, "error");
+            }
+        },
+        error: function (xhr) {
+        
+            $.notify("Error", "error");
+        }
+    });
 }

@@ -11,6 +11,11 @@ namespace AppointmentScheduler.Services
         public List<AppointmentViewModel> ManagersEventsById(string managerId);
         public List<AppointmentViewModel> AssociatesEventsById(string associateId);
 
+        public AppointmentViewModel GetById(int id);
+
+        public Task<int> Delete(int id);
+        public Task<int> ConfirmEvent(int id);
+
 
     }
 }

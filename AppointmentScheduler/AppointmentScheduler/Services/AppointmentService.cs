@@ -15,8 +15,8 @@ namespace AppointmentScheduler.Services
         }
         public async Task<int> AddUpdate(AppointmentViewModel model)
         {
-            var startDate = DateTime.ParseExact(model.StartDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            var endDate = DateTime.ParseExact(model.StartDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture).AddMinutes(Convert.ToDouble(model.Duration));
+            var startDate = DateTime.Parse(model.StartDate);
+            var endDate = DateTime.Parse(model.StartDate).AddMinutes(Convert.ToDouble(model.Duration));
 
             // Update logic
             if (model != null && model.Id > 0) {
@@ -82,8 +82,8 @@ namespace AppointmentScheduler.Services
             {
                 Id = c.Id,
                 Description = c.Description,
-                StartDate = c.StartDate.ToString("MM-dd-yyyy HH:mm:ss"),
-                EndDate = c.EndDate?.ToString("MM-dd-yyyy HH:mm:ss"),
+                StartDate = c.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndDate = c.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"),
                 Title = c.Title,
                 Duration = c.Duration,
                 IsManagerApproved = c.IsManagerApproved,
@@ -96,15 +96,53 @@ namespace AppointmentScheduler.Services
             {
                 Id = c.Id,
                 Description = c.Description,
-                StartDate = c.StartDate.ToString("MM-dd-yyyy HH:mm:ss"),
-                EndDate = c.EndDate?.ToString("MM-dd-yyyy HH:mm:ss"),
+                StartDate = c.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndDate = c.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"),
                 Title = c.Title,
                 Duration = c.Duration,
                 IsManagerApproved = c.IsManagerApproved,
 
             }).ToList();
-
         }
 
-}
+        public AppointmentViewModel GetById(int id)
+        {
+            return _db.Appointments.Where(x => x.Id == id).ToList().Select(c => new AppointmentViewModel()
+            {
+                Id = c.Id,
+                Description = c.Description,
+                StartDate = c.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndDate = c.EndDate?.ToString("yyyy-MM-dd HH:mm:ss"),
+                Title = c.Title,
+                Duration = c.Duration,
+                IsManagerApproved = c.IsManagerApproved,
+                AssociateId = c.AssociateId,
+                ManagerId = c.ManagerId,
+                AssociateName = _db.Users.Where(x => x.Id == c.AssociateId).Select(x => x.Name).FirstOrDefault(),
+                ManagerName = _db.Users.Where(x => x.Id == c.ManagerId).Select(x => x.Name).FirstOrDefault(),
+            }).SingleOrDefault();
+        }
+
+        public async Task<int> Delete(int id)
+        {
+            var appointment = _db.Appointments.FirstOrDefault(x => x.Id == id);
+            if (appointment != null)
+            {
+                _db.Appointments.Remove(appointment);                
+                return await _db.SaveChangesAsync();
+            }
+            return 0;
+        }
+
+        public async Task<int> ConfirmEvent(int id)
+        {
+            var appointment = _db.Appointments.FirstOrDefault(x => x.Id == id);
+            if (appointment != null)
+            {
+                appointment.IsManagerApproved = true;
+                return await _db.SaveChangesAsync();
+            }
+            return 0;
+        }
+    }
 }
