@@ -15,6 +15,7 @@ namespace AppointmentScheduler
 			builder.Services.AddTransient<IAppointmentService, AppointmentService>();
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddHttpContextAccessor();
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

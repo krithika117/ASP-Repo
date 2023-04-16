@@ -35,9 +35,9 @@ namespace AppointmentScheduler.Controllers
 				var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 				if (result.Succeeded)
 				{
-					return RedirectToAction("Index", "Home");
-				}
-				ModelState.AddModelError("", "Invalid login attempt");
+                    return RedirectToAction("Index", "Appointment");
+                }
+                ModelState.AddModelError("", "Invalid login attempt");
 			}
 			return View(model);
 		}
@@ -67,9 +67,9 @@ namespace AppointmentScheduler.Controllers
 				if (result.Succeeded) {
 					await _userManager.AddToRoleAsync(user, model.RoleName);
 					await _signInManager.SignInAsync(user, isPersistent: false);
-					return RedirectToAction("Index", "Appointment");
-				}
-				foreach(var error in result.Errors)
+                    return RedirectToAction("Index", "Appointment");
+                }
+                foreach (var error in result.Errors)
 				{
 					ModelState.AddModelError("",error.Description);
 				}
