@@ -1,0 +1,31 @@
+﻿@model DocumentArea
+<form method="post" asp-controller="Home" asp-action="Update">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="text" name="Author" value="@Model.Author" />
+    <textarea name="DocumentText">@Model.DocumentText</textarea>
+    <br />
+    <input type="submit" value="Save Changes" />
+</form>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'fullscreen',
+        toolbar: 'fullscreen',
+
+        plugins: [
+            'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'prewiew', 'anchor', 'pagebreak',
+            'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
+            'table', 'emoticons', 'template', 'codesample'
+        ],
+        toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify |' +
+            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+            'forecolor backcolor emoticons',
+        menu: {
+            favs: { title: 'menu', items: 'code visualaid | searchreplace | emoticons' }
+        },
+        menubar: 'favs file edit view insert format tools table',
+        content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}'
+    });
+
+</script>

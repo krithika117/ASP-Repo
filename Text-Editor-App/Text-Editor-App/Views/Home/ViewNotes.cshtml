@@ -1,0 +1,17 @@
+﻿
+<h3>Documents</h3>
+<br />
+@foreach (var note in ViewBag.DocList)
+{
+
+    <div class="card mb-3 shadow-lg">
+        <div class="card-body">
+            <h5 class="card-title">@note.Id @note.Author</h5>
+            <p class="card-text">@Html.Raw(note.DocumentText)</p>
+            <a href="/Home/Edit?Id=@note.Id" class="btn btn-success">Edit</a>
+            <a href="/Home/Delete?Id=@note.Id" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+
+   
+}

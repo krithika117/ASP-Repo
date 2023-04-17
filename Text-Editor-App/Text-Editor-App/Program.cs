@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using Text_Editor_App.Models;
 
 namespace Text_Editor_App
@@ -10,16 +13,8 @@ namespace Text_Editor_App
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddDistributedMemoryCache();
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
-            builder.Services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromDays(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
-            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             var app = builder.Build();
@@ -36,6 +31,7 @@ namespace Text_Editor_App
             app.UseStaticFiles();
 
             app.UseRouting();
+                        app.UseAuthentication();;
 
             app.UseAuthorization();
 
@@ -43,6 +39,7 @@ namespace Text_Editor_App
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            //app.MapRazorPages();
             app.Run();
         }
     }

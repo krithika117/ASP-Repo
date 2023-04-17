@@ -1,62 +1,8 @@
-﻿@model Text_Editor_App.Models.DocumentArea;
-@{
-    ViewBag.Title = "Home Page";
-}
-@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    Layout = null;
+﻿@{
+    ViewData["Title"] = "Home Page";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-
-    <h2>Text Editor</h2>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="post" asp-controller="Home" asp-action="Save">
-                    <div class="form-group">
-                        <textarea class="form-control" name="DocumentText"></textarea>
-                    </div>
-                    <div class="form-group text-center">
-                        <input type="submit" class="btn btn-primary" value="Save" />
-                    </div>
-                </form>
-                <div class="text-center">
-                    <span>@Html.Raw(Model.DocumentText)</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script type="text/javascript">
-        tinymce.init({
-            selector: 'textarea',
-            height: 300,
-            plugins: [
-                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'prewiew', 'anchor', 'pagebreak',
-                'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
-                'table', 'emoticons', 'template', 'codesample'
-            ],
-            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify |' +
-                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-                'forecolor backcolor emoticons',
-            menu: {
-                favs: { title: 'menu', items: 'code visualaid | searchreplace | emoticons' }
-            },
-            menubar: 'favs file edit view insert format tools table',
-            content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}'
-        });
-
-    </script>
-</body>
-</html>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
