@@ -108,11 +108,14 @@ function onShowModal(obj, isEventDetail) {
         $("#id").val(obj.id);
         $("#lblAssociateName").html(obj.associateName);
         $("#lblManagerName").html(obj.managerName);
+
+  
         if (obj.isManagerApproved) {
             $("#lblStatus").html('Approved');
             $("#btnConfirm").addClass("d-none");
             $("#btnSubmit").addClass("d-none");
         }
+
         else {
             $("#lblStatus").html('Pending');
             $("#btnConfirm").removeClass("d-none");
@@ -130,7 +133,6 @@ function onShowModal(obj, isEventDetail) {
     }
     $("#appointmentInput").modal("show");
 
-    
 }
 
 function onCloseModal(obj, isEventDetail) {
@@ -139,6 +141,7 @@ function onCloseModal(obj, isEventDetail) {
     $("#id").val(0);
     $("#title").val('');
     $("#description").val('');
+    $("#lblStatus").html('');
     $("#appointmentDate").val('');
     $("#duration").val('');
     $("#associateId").val('');
@@ -166,8 +169,8 @@ function onSubmitForm() {
             contentType: "application/json",
             success: function (response) {
                 if (response.status === 1 || response.status === 2) {
-                    calendar.refetchEvents();                    
                     console.log(response.message);
+                    calendar.refetchEvents();
 
                     console.log("success")
                     $.notify(response.message, "success");

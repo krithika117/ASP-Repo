@@ -64,7 +64,7 @@ namespace AppointmentScheduler.Controllers.Api
                 }
                 else if(role == Helper.Manager)
                 {
-                    commonResponse.dataenum = _appointmentService.ManagersEventsById(loginUserId);
+                    commonResponse.dataenum = _appointmentService.ManagersEventsById(managerId);
                     commonResponse.status = Helper.success_code;
                 }
                 else

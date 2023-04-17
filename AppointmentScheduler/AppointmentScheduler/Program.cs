@@ -1,6 +1,8 @@
 using AppointmentScheduler.Models;
 using AppointmentScheduler.Services;
+using AppointmentScheduler.Utility;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler
@@ -16,6 +18,7 @@ namespace AppointmentScheduler
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddDistributedMemoryCache();
+			builder.Services.AddScoped<IEmailSender, EmailSender>();
 			builder.Services.AddSession( options => {
 				options.IdleTimeout = TimeSpan.FromDays(10);
 				options.Cookie.HttpOnly = true;

@@ -1,22 +1,28 @@
 ﻿using AppointmentScheduler.Models;
 using AppointmentScheduler.Models.ViewModels;
 using AppointmentScheduler.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Globalization;
+using System.Numerics;
 
 namespace AppointmentScheduler.Services
 {
     public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _db;
+        private readonly IEmailSender _emailSender;
 
-        public AppointmentService(ApplicationDbContext db)
+        public AppointmentService(ApplicationDbContext db, IEmailSender emailSender)
         {
             _db = db;
+            _emailSender = emailSender;
         }
         public async Task<int> AddUpdate(AppointmentViewModel model)
         {
             var startDate = DateTime.Parse(model.StartDate);
             var endDate = DateTime.Parse(model.StartDate).AddMinutes(Convert.ToDouble(model.Duration));
+            var associate = _db.Users.FirstOrDefault(u => u.Id == model.AssociateId);
+            var manager = _db.Users.FirstOrDefault(u => u.Id == model.ManagerId);
 
             // Update logic
             if (model != null && model.Id > 0) {
@@ -36,6 +42,7 @@ namespace AppointmentScheduler.Services
 
             // Create logic
             else {
+
                 Console.WriteLine("Triggered create");
                 Appointment appointment = new Appointment()
                 {
@@ -49,6 +56,11 @@ namespace AppointmentScheduler.Services
                     IsManagerApproved = false,
                     AdminId = model.AdminId
                 };
+                _db.Appointments.Add(appointment);
+                await _emailSender.SendEmailAsync(manager.Email, "Appointment Created",
+    $"Your appointment with {associate.Name} is created and in pending status");
+                await _emailSender.SendEmailAsync(associate.Email, "Appointment Created",
+                    $"Your appointment with {manager.Name} is created and in pending status");
                 _db.Appointments.Add(appointment);
                 await _db.SaveChangesAsync();
                 return 2;

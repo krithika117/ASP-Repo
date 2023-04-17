@@ -39,12 +39,12 @@
                         @if (User.IsInRole(AppointmentScheduler.Utility.Helper.Manager))
                         {
                             <div class="form-group">
-                                <label for="lblAssociateName">Associate Name</label>
-                                <label class="form-control" disabled id="lblAssociateName" />
+                                <label for="title">Select Associate</label>
+                                <select id="associateId" asp-items="@(new SelectList(ViewBag.AssociateList, "Id", "Name"))" class="form-control"></select>
                             </div>
                             <div class="form-group">
                                 <label for="lblStatus">Status</label>
-                                <label class="form-control" disabled id="lblStatus" />
+                                <label class="form-control" disabled id="lblStatus"/>
                             </div>
                         }
                         @if (User.IsInRole(AppointmentScheduler.Utility.Helper.Associate))
@@ -55,7 +55,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="lblStatus">Status</label>
-                                <label class="form-control" disabled id="lblStatus" />
+                                <input class="form-control" disabled id="lblStatus" />
                             </div>
                         }
                     }
@@ -75,6 +75,7 @@
                     } 
                     @if (User.IsInRole(AppointmentScheduler.Utility.Helper.Manager))
                     {
+                        <button type="button" id="btnSubmit" class="btn btn-success" onclick="onSubmitForm();">Submit</button>
                         <button type="button" id="btnConfirm" class="btn btn-success" onclick="onConfirm();">Confirm</button>
                         <button type="button" id="btnDelete" class="btn btn-danger hidden" onclick="onDeleteAppointment();">Delete</button>
                     }
