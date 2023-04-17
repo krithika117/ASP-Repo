@@ -15,6 +15,12 @@ namespace AppointmentScheduler
 			builder.Services.AddTransient<IAppointmentService, AppointmentService>();
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+			builder.Services.AddDistributedMemoryCache();
+			builder.Services.AddSession( options => {
+				options.IdleTimeout = TimeSpan.FromDays(10);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+				});
 			builder.Services.AddHttpContextAccessor();
 			var app = builder.Build();
 
@@ -33,6 +39,7 @@ namespace AppointmentScheduler
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+			app.UseSession();
 
 			app.MapControllerRoute(
 				name: "default",

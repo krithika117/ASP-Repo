@@ -20,9 +20,20 @@ namespace AppointmentScheduler.Services
 
             // Update logic
             if (model != null && model.Id > 0) {
+                var appointment = _db.Appointments.FirstOrDefault(x => x.Id == model.Id);
+                appointment.Title = model.Title;
+                appointment.Description = model.Description;
+                appointment.StartDate = startDate;
+                appointment.EndDate = endDate;
+                appointment.Duration = model.Duration;
+                appointment.ManagerId = model.ManagerId;
+                appointment.AssociateId = model.AssociateId;
+                appointment.IsManagerApproved = false;
+                appointment.AdminId = model.AdminId;
+                await _db.SaveChangesAsync();
                 return 1;
             }
-            
+
             // Create logic
             else {
                 Console.WriteLine("Triggered create");

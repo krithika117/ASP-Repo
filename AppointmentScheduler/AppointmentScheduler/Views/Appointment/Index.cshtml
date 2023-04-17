@@ -1,12 +1,34 @@
-﻿<div class="row">
-    <div class="container">
-        @if (!User.IsInRole(AppointmentScheduler.Utility.Helper.Admin))
-        {
-            <div class="form-group row col-2"  id="divManagerList">
-                <label>Select Manager</label>
-                @Html.DropDownList("managerId", new SelectList(ViewBag.ManagerList, "Id", "Name"), new { @class = "form-control select2" , @onchange = "ManagerChange()"})
-            </div>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
+<div class="row">
+
+    @if (TempData.ContainsKey("newAdminSignUp"))
+    {
+        <div class=container>
+            <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                <strong>Account created for @TempData["newAdminSignUp"].ToString() </strong>
+            </div>
+        </div>
+    }
+
+    <div class="container">
+        @if (User.IsInRole(AppointmentScheduler.Utility.Helper.Admin))
+        {
+            <div class="row">
+                <div class="form-group  col-4" id="divDoctorList">
+                    <label> Select Doctor</label>
+                    @Html.DropDownList("managerId", new SelectList(ViewBag.ManagerList, "Id", "Name"), new
+                {
+                @class = "form-control select2",
+                @onchange = "ManagerChange();"
+                })
+                </div>
+                <div class="col-3 offset-5">
+                    <a asp-controller="Account" asp-action="Register" class="btn-secondary form-control">Admin Registration</a>
+                </div>
+            </div>
         }
         <div id="calendar"></div>
     </div>
