@@ -55,11 +55,12 @@ namespace JobPortal.Controllers
 			catch
 			{
 				TempData["message"] = "Unable to delete job";
-				TempData["messageType"] = "alert-danged";
+				TempData["messageType"] = "alert-danger";
 			}
 			return Redirect("Admin");
 		}
-		public IActionResult AddJob2()
+		[HttpPost]
+		public IActionResult AddJob(IFormCollection form)
 		{
 			try
 			{
@@ -80,7 +81,7 @@ namespace JobPortal.Controllers
 				TempData["message"] = e.Message;
 				TempData["messageType"] = "alert-danger";
 			}
-			return Redirect("AddJob");
+			return View();
 		}
 		public IActionResult Admin()
 		{
