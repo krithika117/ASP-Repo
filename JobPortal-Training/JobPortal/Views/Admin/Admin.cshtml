@@ -3,7 +3,7 @@
 }
 
 <div id="message">
-	@if (TempData["message"] != null && TempData["message"].ToString().Length > 0)
+	@if (TempData["message"] != null && TempData["message"].ToString()!.Length > 0)
 	{
 		<div class="alert @TempData["messageType"]">
 			@TempData["message"]
@@ -36,9 +36,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var job in (List<JobModel>)ViewBag.jobs)
+		@foreach (var job in (List<JobModel>)ViewData["jobs"])
 		{
-			@if (ViewBag.editID != null && ViewBag.editID == job.Id)
+			@if (ViewData["editID"] != null && (int)ViewData["editID"]! == job.Id)
 {
 			<form method="post" action="Edit">
 			<tr>

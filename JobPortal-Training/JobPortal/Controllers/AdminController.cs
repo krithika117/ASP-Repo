@@ -101,14 +101,14 @@ namespace JobPortal.Controllers
 					jobs.Add(job);
 				}
 			}
-			ViewBag.jobs = jobs;
+			ViewData["jobs"] = jobs;
 			if (Request.Query["editid"].ToString() != null)
 			{
-				ViewBag.editID = Convert.ToInt32(Request.Query["editid"]);
+				ViewData["editid"] = Convert.ToInt32(Request.Query["editid"]);
 			}
 			else
 			{
-				ViewBag.editID = null;
+				ViewData["editid"] = null;
 			}
 			return View();
 		}
