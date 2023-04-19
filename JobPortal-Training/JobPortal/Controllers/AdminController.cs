@@ -28,9 +28,10 @@ namespace JobPortal.Controllers
 				string name = Request.Form["name"];
 				string category = Request.Form["category"];
 				string subCategory = Request.Form["subCategory"];
+				string CompanyName = Request.Form["companyName"];
 				float salary = float.Parse(Request.Form["salary"]);
 				string deadline = Request.Form["deadline"];
-				command.CommandText = $"update jobs set name='{name}', category='{category}', subcategory='{subCategory}', salary={salary}, deadline='{deadline}' where id={id}";
+				command.CommandText = $"update jobs set name='{name}', category='{category}', subcategory='{subCategory}', salary={salary}, deadline='{deadline}', companyName= '{CompanyName}' where id={id}";
 				Console.WriteLine(command.CommandText);
 				command.ExecuteNonQuery();
 				TempData["message"] = "Job updated successfully";
@@ -72,10 +73,11 @@ namespace JobPortal.Controllers
 				string subCategory = Request.Form["subCategory"];
 				float salary = float.Parse(Request.Form["salary"]);
 				string deadline = Request.Form["deadline"];
+				string CompanyName = Request.Form["CompanyName"];
 				SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
 				conn.Open();
 				SqlCommand command = conn.CreateCommand();
-				command.CommandText = $"insert into jobs values('{name}','{category}','{subCategory}',{salary},'{deadline}')";
+				command.CommandText = $"insert into jobs values('{name}','{category}','{subCategory}',{salary},'{deadline}','{CompanyName}')";
 				command.ExecuteNonQuery();
 				TempData["message"] = "Job added successfully";
 				TempData["messageType"] = "alert-success";
@@ -89,7 +91,6 @@ namespace JobPortal.Controllers
 		}
 		public IActionResult Admin()
 		{
-
 			SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
 			conn.Open();
 			SqlCommand command = conn.CreateCommand();
@@ -105,6 +106,7 @@ namespace JobPortal.Controllers
 					job.SubCategory = reader.GetString(3);
 					job.Salary = (float)reader.GetDouble(4);
 					job.DeadLine = reader.GetDateTime(5);
+					job.CompanyName = reader.GetString(6);
 					jobs.Add(job);
 				}
 			}

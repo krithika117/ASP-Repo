@@ -63,7 +63,7 @@ namespace JobPortal.Controllers
                 }
                 else
                 {
-                    command.CommandText = $"SELECT * FROM jobs WHERE name LIKE '{search}%'";
+                    command.CommandText = $"SELECT * FROM jobs WHERE name LIKE '%{search}%' OR companyName LIKE '%{search}%' OR Category LIKE '%{search}%'";
                 }
 
                 Console.WriteLine(command.CommandText);

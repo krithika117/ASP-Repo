@@ -30,6 +30,7 @@
 			<th>Sub-category</th>
 			<th>Salary</th>
 			<th>Deadline</th>
+			<th>Company name</th>
 			<th>Edit</th>
 			<th>Delete</th>
 		</tr>
@@ -39,35 +40,45 @@
 		{
 			@if (ViewBag.editID != null && ViewBag.editID == job.Id)
 {
-    <form method="post" action="Edit">
-    <tr>
-        <td><input type="hidden" name="id" value="@job.Id" />@job.Id</td>
-        <td><input name="name" value="@job.Name"></td>
-        <td>
+			<form method="post" action="Edit">
+			<tr>
+					<td><input type="hidden" name="id" value="@job.Id" />@job.Id</td>
+					<td><input name="name" value="@job.Name"></td>
+					<td>
 						<select class="form-control" name="category" id="category" required>
 							<option value="@job.Category" selected disabled>@job.Category</option>
-							<option value="IT">IT</option>
-							<option value="Outreach">Outreach</option>
+							<option value="Information Technology">Information Technology</option>
+							<option value="Sales">Sales</option>
+							<option value="Marketing">Marketing</option>
+							<option value="Human Resources">Human Resources</option>
+							<option value="Operations">Operations</option>
+
+
 						</select>
 					</td>
-        <td>
+					<td>
                         <select class="form-control" name="subcategory" id="subcategory" required>
 							<option value="@job.SubCategory" selected disabled>@job.SubCategory</option>
                         </select>
                     </td>
-        <td><input name="salary" value="@job.Salary"></td>
-        <td><input type="date" name="deadline" value="@job.DeadLine.ToString("yyyy-MM-dd")"></td>
-        <td><button class="btn btn-primary" type="submit">Update</button></td>
-        <td><a class="btn btn-danger" href="Admin">Cancel</a></td>
-    </tr>
-    </form>
+					<td><input name="salary" value="@job.Salary"></td>
+					<td><input type="date" name="deadline" value="@job.DeadLine.ToString("yyyy-MM-dd")"></td>
+					<td><input name="CompanyName" value="@job.CompanyName"></td>
+
+					<td><button class="btn btn-primary" type="submit">Update</button></td>
+					<td><a class="btn btn-danger" href="Admin">Cancel</a></td>
+				</tr>
+				</form>
 
 
 				<script>
 					var categoryObject = {
-						"IT": ["Dev", "Testing", "UI/UX"],
-						"Outreach": ["Promotion", "Graphic Design"]
-					};
+						"Information Technology": ["Web Development", "Mobile Development", "Software Testing"],
+						"Sales": ["Business Development", "Customer Support"],
+						"Marketing": ["Advertising", "Public Relations"],
+						"Human Resources": ["Employee Recruitment", "Employee Training"],
+						"Operations": ["Supply Chain Management", "Logistics", "Quality Control"]
+					}
 
 					var categorySel = document.getElementById("category");
 					var subcategorySel = document.getElementById("subcategory");
@@ -93,6 +104,8 @@
 					<td>@job.SubCategory</td>
 					<td>@job.Salary</td>
 					<td>@job.DeadLine.ToString("yyyy-dd-MM")</td>
+					<td>@job.CompanyName</td>
+
 					<td><a class="btn btn-primary" href="Admin?editid=@job.Id">Edit</a></td>
 					<td><button class="btn btn-danger" onclick="deleteJob(@job.Id)">Delete</button></td>
 				</tr>

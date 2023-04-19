@@ -8,5 +8,7 @@
 		public string SubCategory { get; set; }
 		public float Salary { get; set; }
 		public DateTime DeadLine { get; set; }
-	}
+        public string CompanyName { get; set; }
+
+    }
 }
