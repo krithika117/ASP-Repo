@@ -106,7 +106,7 @@ namespace JobPortal.Controllers
 			}
 			return View();
 		}
-		public IActionResult Jobs()
+		public IActionResult Admin()
 		{
 			SqlCommand command = Connection.CreateCommand();
 			command.CommandText = "select * from jobs";
