@@ -21,9 +21,7 @@ namespace JobPortal.Controllers
 		{
 			try
 			{
-				SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
-				conn.Open();
-				SqlCommand command = conn.CreateCommand();
+				SqlCommand command = Connection.CreateCommand();
 				int id = Convert.ToInt32(Request.Form["id"]);
 				string name = Request.Form["name"];
 				string category = Request.Form["category"];
@@ -32,7 +30,6 @@ namespace JobPortal.Controllers
 				float salary = float.Parse(Request.Form["salary"]);
 				string deadline = Request.Form["deadline"];
 				command.CommandText = $"update jobs set name='{name}', category='{category}', subcategory='{subCategory}', salary={salary}, deadline='{deadline}', companyName= '{CompanyName}' where id={id}";
-				Console.WriteLine(command.CommandText);
 				command.ExecuteNonQuery();
 				TempData["message"] = "Job updated successfully";
 				TempData["messageType"] = "alert-success";
@@ -48,16 +45,14 @@ namespace JobPortal.Controllers
 		{
 			try
 			{
-				SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
-				conn.Open();
 				int id = Convert.ToInt32(Request.Query["id"]);
-				SqlCommand command = conn.CreateCommand();
+				SqlCommand command = Connection.CreateCommand();
 				command.CommandText = $"delete from jobs where id={id}";
 				command.ExecuteNonQuery();
 				TempData["message"] = "Job deleted successfully";
 				TempData["messageType"] = "alert-success";
 			}
-			catch (Exception e)
+			catch
 			{
 				TempData["message"] = "Unable to delete job";
 				TempData["messageType"] = "alert-danged";
@@ -74,9 +69,7 @@ namespace JobPortal.Controllers
 				float salary = float.Parse(Request.Form["salary"]);
 				string deadline = Request.Form["deadline"];
 				string CompanyName = Request.Form["CompanyName"];
-				SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
-				conn.Open();
-				SqlCommand command = conn.CreateCommand();
+				SqlCommand command = Connection.CreateCommand();
 				command.CommandText = $"insert into jobs values('{name}','{category}','{subCategory}',{salary},'{deadline}','{CompanyName}')";
 				command.ExecuteNonQuery();
 				TempData["message"] = "Job added successfully";
@@ -91,9 +84,7 @@ namespace JobPortal.Controllers
 		}
 		public IActionResult Admin()
 		{
-			SqlConnection conn = new(configuration.GetConnectionString("jobDB"));
-			conn.Open();
-			SqlCommand command = conn.CreateCommand();
+			SqlCommand command = Connection.CreateCommand();
 			command.CommandText = "select * from jobs";
 			using (var reader = command.ExecuteReader())
 			{

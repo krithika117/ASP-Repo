@@ -18,9 +18,7 @@ namespace JobPortal.Controllers
             List<JobModel> jobs = new List<JobModel>();
             try
             {
-                SqlConnection conn = new SqlConnection(configuration.GetConnectionString("jobDB"));
-                conn.Open();
-                SqlCommand command = conn.CreateCommand();
+                SqlCommand command = Connection.CreateCommand();
                 command.CommandText = $"SELECT * FROM jobs";
                 Console.WriteLine(command.CommandText);
 
@@ -53,9 +51,7 @@ namespace JobPortal.Controllers
             try
             {
                 List<JobModel> jobs = new List<JobModel>();
-                SqlConnection conn = new SqlConnection(configuration.GetConnectionString("jobDB"));
-                conn.Open();
-                SqlCommand command = conn.CreateCommand();
+                SqlCommand command = Connection.CreateCommand();
 
                 if (string.IsNullOrEmpty(search))
                 {

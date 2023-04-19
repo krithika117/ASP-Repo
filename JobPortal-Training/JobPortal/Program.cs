@@ -11,6 +11,8 @@ namespace JobPortal
 
             var app = builder.Build();
 
+            Connection.Init(app.Configuration.GetConnectionString("jobDBA"));
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
