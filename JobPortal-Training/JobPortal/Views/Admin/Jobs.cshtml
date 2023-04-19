@@ -21,6 +21,39 @@
 </script>
 <a href="/Admin/AddJob" class="btn btn-primary">Add Job</a>
 
+<button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#filters">Filters</button>
+
+<form method="get">
+	<div class="collapse" id="filters">
+		<div class="row mb-3">
+			<label class="col-sm-2 col-form-label">Category</label>
+			<div class="col-sm-4">
+				<select class="form-control" name="filterCategory" id="filterCategory">
+					<option value="" selected disabled>Select Category</option>
+				</select>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label class="col-sm-2 col-form-label">Sub-Category</label>
+			<div class="col-sm-4">
+				<select class="form-control" name="filterSubcategory" id="filterSubcategory">
+					<option value="" selected disabled>Select Sub-Category</option>
+				</select>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label class="col-sm-2 col-form-label">Minimum Salary</label>
+			<div class="col-sm-4">
+				<input type="number" min="0" class="form-control" name="filterSalary" id="filterSalary" />
+			</div>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary">Apply</button>
+		</div>
+	</div>
+</form>
+<br />
+
 <table class="table">
 	<thead>
 		<tr>
@@ -50,10 +83,12 @@
 					<td><input name="name" value="@job.Name"></td>
 					<td>
 						<select class="form-control" name="category" id="category" required>
+							<option value="" selected disabled>Select Category</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control" name="subcategory" id="subcategory" required>
+							<option value="" selected disabled>Select Sub-Category</option>
 						</select>
 					</td>
 					<td><input name="salary" value="@job.Salary"></td>
@@ -84,30 +119,28 @@
 		}
 	</tbody>
 </table>
+
+<script src="~/js/categories.js"></script>
+
+<script>
+	var categoryObject = @Html.Raw(Json.Serialize(ViewBag.categories));
+	var categorySel = document.getElementById("filterCategory");
+	var subcategorySel = document.getElementById("filterSubcategory");
+	initCategories(categorySel, subcategorySel);
+
+	categorySel.value = "@ViewData["filterCategory"]";
+	categorySel.onchange(); // call forcibly, otherwise the values aren't loaded
+	subcategorySel.value = "@ViewData["filterSubcategory"]";
+	document.getElementById("filterSalary").value = @ViewData["filterSalary"];
+</script>
+
 @if (editJob != null)
 {
 	<script>
-		var categoryObject = @Html.Raw(Json.Serialize(ViewBag.categories));
-
 		var categorySel = document.getElementById("category");
 		var subcategorySel = document.getElementById("subcategory");
 
-		var categories = Object.keys(categoryObject);
-
-		// populate cateogories
-		for (var i = 0; i < categories.length; i++) {
-			categorySel.options[i + 1] = new Option(categories[i], categories[i]);
-		}
-
-		categorySel.onchange = function () {
-			// empty sub-category dropdown
-			subcategorySel.length = 1;
-			// display correct values
-			var z = categoryObject[this.value];
-			for (var i = 0; i < z.length; i++) {
-				subcategorySel.options[subcategorySel.options.length] = new Option(z[i], z[i]);
-			}
-		}
+		initCategories(categorySel, subcategorySel);
 
 		categorySel.value = "@editJob.Category";
 		categorySel.onchange(); // call forcibly, otherwise the values aren't loaded

@@ -1,4 +1,5 @@
-﻿using Azure.Messaging;
+﻿using System.Text;
+using Azure.Messaging;
 using JobPortal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -18,32 +19,70 @@ namespace JobPortal.Controllers
 			ViewData["categories"] = GetCategories();
 			return View();
 		}
-        private Dictionary<string, List<string>> GetCategories()
-        {
-            SqlCommand command = Connection.CreateCommand("select c.name as category, sc.name as subcategory from category c join subcategory sc on c.id = sc.categoryid");
-            Dictionary<string, List<string>> categories = new();
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    string category = (string)reader["category"];
-                    string subCategory = (string)reader["subcategory"];
-                    if (categories.ContainsKey(category))
-                    {
-                        categories[category].Add(subCategory);
-                    }
-                    else
-                    {
-                        categories.Add(category, new() { subCategory });
-                    }
-                }
-            }
-            return categories;
-        }
-        public IActionResult Edit()
+
+		public IActionResult Jobs()
 		{
-            try
-            {
+			StringBuilder whereClause = new();
+
+			string category = Request.Query["filterCategory"];
+			string subcategory = Request.Query["filterSubcategory"];
+			string salary = Request.Query["filterSalary"];
+			if (category != null && category.Length > 0)
+			{
+				ViewData["filterCategory"] = category;
+				whereClause.Append($"category='{category}'");
+			}
+			if (subcategory != null && subcategory.Length > 0)
+			{
+				ViewData["filterSubcategory"] = subcategory;
+				if (whereClause.Length > 0)
+				{
+					whereClause.Append(" and ");
+				}
+				whereClause.Append($"subcategory='{subcategory}'");
+			}
+			if (salary != null && salary.Length > 0)
+			{
+				ViewData["filterSalary"] = salary;
+				if (whereClause.Length > 0)
+				{
+					whereClause.Append(" and ");
+				}
+				whereClause.Append($"salary>={salary}");
+			}
+			if (whereClause.Length > 0)
+			{
+				whereClause.Insert(0, "where ");
+			}
+			GetJobs(whereClause.ToString());
+			return View();
+		}
+		private Dictionary<string, List<string>> GetCategories()
+		{
+			SqlCommand command = Connection.CreateCommand("select c.name as category, sc.name as subcategory from category c join subcategory sc on c.id = sc.categoryid");
+			Dictionary<string, List<string>> categories = new();
+			using (var reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					string category = (string)reader["category"];
+					string subCategory = (string)reader["subcategory"];
+					if (categories.ContainsKey(category))
+					{
+						categories[category].Add(subCategory);
+					}
+					else
+					{
+						categories.Add(category, new() { subCategory });
+					}
+				}
+			}
+			return categories;
+		}
+		public IActionResult Edit()
+		{
+			try
+			{
 				SqlCommand command = Connection.CreateCommand();
 				int id = Convert.ToInt32(Request.Form["id"]);
 				string name = Request.Form["name"];
@@ -62,7 +101,7 @@ namespace JobPortal.Controllers
 				TempData["message"] = ex.Message;
 				TempData["messageType"] = "alert-danger";
 			}
-			return Redirect("Admin");
+			return Redirect("Jobs");
 		}
 		public IActionResult Delete()
 		{
@@ -80,7 +119,7 @@ namespace JobPortal.Controllers
 				TempData["message"] = "Unable to delete job";
 				TempData["messageType"] = "alert-danger";
 			}
-			return Redirect("Admin");
+			return Redirect("Jobs");
 		}
 		[HttpPost]
 		public IActionResult AddJob(IFormCollection form)
@@ -106,10 +145,10 @@ namespace JobPortal.Controllers
 			}
 			return View();
 		}
-		public IActionResult Jobs()
+		private void GetJobs(string where = "")
 		{
 			SqlCommand command = Connection.CreateCommand();
-			command.CommandText = "select * from jobs";
+			command.CommandText = "select * from jobs " + where;
 			using (var reader = command.ExecuteReader())
 			{
 				while (reader.Read())
@@ -135,7 +174,6 @@ namespace JobPortal.Controllers
 			{
 				ViewData["editid"] = null;
 			}
-			return View();
 		}
 	}
 }
