@@ -1,5 +1,5 @@
 ﻿@{
-	ViewData["Title"] = "Admin";
+	ViewData["Title"] = "Jobs";
 }
 
 <div id="message">
@@ -61,7 +61,7 @@
 					<td><input name="CompanyName" value="@job.CompanyName"></td>
 
 					<td><button class="btn btn-primary" type="submit">Update</button></td>
-					<td><a class="btn btn-danger" href="Admin">Cancel</a></td>
+					<td><a class="btn btn-danger" href="Jobs">Cancel</a></td>
 				</tr>
 				</form>
 			}
@@ -77,7 +77,7 @@
 					<td>@job.DeadLine.ToString("yyyy-dd-MM")</td>
 					<td>@job.CompanyName</td>
 
-					<td><a class="btn btn-primary" href="Admin?editid=@job.Id">Edit</a></td>
+					<td><a class="btn btn-primary" href="Jobs?editid=@job.Id">Edit</a></td>
 					<td><button class="btn btn-danger" onclick="deleteJob(@job.Id)">Delete</button></td>
 				</tr>
 			}
