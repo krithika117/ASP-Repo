@@ -1,4 +1,5 @@
-﻿using JobPortal.Models;
+﻿using System.Text;
+using JobPortal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ namespace JobPortal.Controllers
 		}
         public IActionResult SearchIndex()
         {
+			ViewData["categories"] = Helper.GetCategories();
             List<JobModel> jobs = new List<JobModel>();
             try
             {
@@ -46,22 +48,50 @@ namespace JobPortal.Controllers
             return View();
         }
 
-        public ActionResult Search(string search)
+        public ActionResult Search(string search, string searchCategory, string searchSubcategory, string salary)
         {
+			ViewData["categories"] = Helper.GetCategories();
             try
             {
                 List<JobModel> jobs = new List<JobModel>();
                 SqlCommand command = Connection.CreateCommand();
 
-                if (string.IsNullOrEmpty(search))
+                StringBuilder commandText = new("SELECT * FROM jobs");
+                StringBuilder whereClause = new();
+                if(search != null && search.Length > 0)
                 {
-                    command.CommandText = $"SELECT * FROM jobs";
-                }
-                else
-                {
-                    command.CommandText = $"SELECT * FROM jobs WHERE name LIKE '%{search}%' OR companyName LIKE '%{search}%' OR Category LIKE '%{search}%'";
-                }
-
+					whereClause.Append($"name LIKE '%{search}%' OR companyName LIKE '%{search}%' OR Category LIKE '%{search}%'");
+				}
+				if (searchCategory != null && searchCategory.Length > 0)
+				{
+					if (whereClause.Length > 0)
+					{
+						whereClause.Append(" and ");
+					}
+					whereClause.Append($"category='{searchCategory}'");
+				}
+				if (searchSubcategory != null && searchSubcategory.Length > 0)
+				{
+					if (whereClause.Length > 0)
+					{
+						whereClause.Append(" and ");
+					}
+					whereClause.Append($"subcategory='{searchSubcategory}'");
+				}
+				if (salary != null && salary.Length > 0)
+				{
+					if (whereClause.Length > 0)
+					{
+						whereClause.Append(" and ");
+					}
+					whereClause.Append($"salary>={salary}");
+				}
+				if (whereClause.Length > 0)
+				{
+					whereClause.Insert(0, " where ");
+				}
+                commandText.Append(whereClause);
+                command.CommandText = commandText.ToString();
                 Console.WriteLine(command.CommandText);
 
                 using (var reader = command.ExecuteReader())

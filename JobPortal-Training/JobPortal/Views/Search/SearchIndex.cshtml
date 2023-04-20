@@ -5,6 +5,19 @@
     <form id="search-form" class="form-inline">
         <div class="form-group shadow bg-light">
             <input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+        </div><br>
+        <div class="form-group shadow bg-light">
+            <select class="form-control" id="searchCategory" name="searchCategory">
+                <option value="" selected>Select Category</option>
+            </select>
+        </div><br>
+        <div class="form-group shadow bg-light">
+            <select class="form-control" id="searchSubcategory" name="searchSubcategory">
+                <option value="" selected>Select Sub-Category</option>
+            </select>
+        </div><br>
+        <div class="form-group shadow bg-light">
+            <input type="text" class="form-control" id="salary" name="salary" placeholder="Minimum Salary">
         </div>
     </form>
     <br />
@@ -29,10 +42,12 @@
     </div>
 }
 
+<script src="~/js/categories.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#search').on('input', function () {
+        $(':input').on("input", function () {
             $.ajax({
                 url: '@Url.Action("Search", "Search")',
                 data: $('#search-form').serialize(),
@@ -43,4 +58,9 @@
             });
         });
     });
+
+    var categoryObject = @Html.Raw(Json.Serialize(ViewBag.categories));
+    var categorySel = document.getElementById("searchCategory");
+    var subcategorySel = document.getElementById("searchSubcategory");
+    initCategories(categoryObject, categorySel, subcategorySel);
 </script>

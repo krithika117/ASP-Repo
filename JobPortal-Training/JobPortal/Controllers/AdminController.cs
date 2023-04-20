@@ -16,7 +16,7 @@ namespace JobPortal.Controllers
 		}
 		public IActionResult AddJob()
 		{
-			ViewData["categories"] = GetCategories();
+			ViewData["categories"] = Helper.GetCategories();
 			return View();
 		}
 
@@ -57,28 +57,7 @@ namespace JobPortal.Controllers
 			GetJobs(whereClause.ToString());
 			return View();
 		}
-		private Dictionary<string, List<string>> GetCategories()
-		{
-			SqlCommand command = Connection.CreateCommand("select c.name as category, sc.name as subcategory from category c join subcategory sc on c.id = sc.categoryid");
-			Dictionary<string, List<string>> categories = new();
-			using (var reader = command.ExecuteReader())
-			{
-				while (reader.Read())
-				{
-					string category = (string)reader["category"];
-					string subCategory = (string)reader["subcategory"];
-					if (categories.ContainsKey(category))
-					{
-						categories[category].Add(subCategory);
-					}
-					else
-					{
-						categories.Add(category, new() { subCategory });
-					}
-				}
-			}
-			return categories;
-		}
+		
 		public IActionResult Edit()
 		{
 			try
@@ -168,7 +147,7 @@ namespace JobPortal.Controllers
 			if (Request.Query["editid"].ToString() != null)
 			{
 				ViewData["editid"] = Convert.ToInt32(Request.Query["editid"]);
-				ViewData["categories"] = GetCategories();
+				ViewData["categories"] = Helper.GetCategories();
 			}
 			else
 			{
