@@ -1,4 +1,4 @@
-function initCategories(categorySel, subcategorySel) {
+function initCategories(categoryObject, categorySel, subcategorySel) {
 	var categories = Object.keys(categoryObject);
 
 	// populate cateogories

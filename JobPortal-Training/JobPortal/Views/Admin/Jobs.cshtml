@@ -126,12 +126,12 @@
 	var categoryObject = @Html.Raw(Json.Serialize(ViewBag.categories));
 	var categorySel = document.getElementById("filterCategory");
 	var subcategorySel = document.getElementById("filterSubcategory");
-	initCategories(categorySel, subcategorySel);
+	initCategories(categoryObject, categorySel, subcategorySel);
 
 	categorySel.value = "@ViewData["filterCategory"]";
 	categorySel.onchange(); // call forcibly, otherwise the values aren't loaded
 	subcategorySel.value = "@ViewData["filterSubcategory"]";
-	document.getElementById("filterSalary").value = @ViewData["filterSalary"];
+	document.getElementById("filterSalary").value = "@ViewData["filterSalary"]";
 </script>
 
 @if (editJob != null)
@@ -140,7 +140,7 @@
 		var categorySel = document.getElementById("category");
 		var subcategorySel = document.getElementById("subcategory");
 
-		initCategories(categorySel, subcategorySel);
+		initCategories(categoryObject, categorySel, subcategorySel);
 
 		categorySel.value = "@editJob.Category";
 		categorySel.onchange(); // call forcibly, otherwise the values aren't loaded
