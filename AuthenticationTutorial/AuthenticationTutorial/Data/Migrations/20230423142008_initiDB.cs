@@ -4,7 +4,7 @@
 
 namespace AuthenticationTutorial.Data.Migrations
 {
-    public partial class initial_dbset : Migration
+    public partial class initiDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

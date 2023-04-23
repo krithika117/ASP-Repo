@@ -9,9 +9,8 @@ namespace AuthenticationTutorial.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
         }
-        public DbSet<StudentModel> Students { get; set; }
+        public DbSet<Student> Students { get; set; }
 
     }
 }

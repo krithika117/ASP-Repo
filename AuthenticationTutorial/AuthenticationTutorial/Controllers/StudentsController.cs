@@ -7,23 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AuthenticationTutorial.Data;
 using AuthenticationTutorial.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace AuthenticationTutorial.Controllers
 {
-    public class StudentModelsController : Controller
+    public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public StudentModelsController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: StudentModels
-        [Authorize(Roles = "Administrator")]
-
+        // GET: Students
         public async Task<IActionResult> Index()
         {
               return _context.Students != null ? 
@@ -31,7 +27,7 @@ namespace AuthenticationTutorial.Controllers
                           Problem("Entity set 'ApplicationDbContext.Students'  is null.");
         }
 
-        // GET: StudentModels/Details/5
+        // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Students == null)
@@ -39,39 +35,39 @@ namespace AuthenticationTutorial.Controllers
                 return NotFound();
             }
 
-            var studentModel = await _context.Students
+            var student = await _context.Students
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentModel == null)
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(studentModel);
+            return View(student);
         }
 
-        // GET: StudentModels/Create
+        // GET: Students/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: StudentModels/Create
+        // POST: Students/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email")] StudentModel studentModel)
+        public async Task<IActionResult> Create([Bind("Id,Name,Email")] Student student)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(studentModel);
+                _context.Add(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(studentModel);
+            return View(student);
         }
 
-        // GET: StudentModels/Edit/5
+        // GET: Students/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Students == null)
@@ -79,22 +75,22 @@ namespace AuthenticationTutorial.Controllers
                 return NotFound();
             }
 
-            var studentModel = await _context.Students.FindAsync(id);
-            if (studentModel == null)
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
             {
                 return NotFound();
             }
-            return View(studentModel);
+            return View(student);
         }
 
-        // POST: StudentModels/Edit/5
+        // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email")] StudentModel studentModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email")] Student student)
         {
-            if (id != studentModel.Id)
+            if (id != student.Id)
             {
                 return NotFound();
             }
@@ -103,12 +99,12 @@ namespace AuthenticationTutorial.Controllers
             {
                 try
                 {
-                    _context.Update(studentModel);
+                    _context.Update(student);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentModelExists(studentModel.Id))
+                    if (!StudentExists(student.Id))
                     {
                         return NotFound();
                     }
@@ -119,10 +115,10 @@ namespace AuthenticationTutorial.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(studentModel);
+            return View(student);
         }
 
-        // GET: StudentModels/Delete/5
+        // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Students == null)
@@ -130,17 +126,17 @@ namespace AuthenticationTutorial.Controllers
                 return NotFound();
             }
 
-            var studentModel = await _context.Students
+            var student = await _context.Students
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentModel == null)
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(studentModel);
+            return View(student);
         }
 
-        // POST: StudentModels/Delete/5
+        // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -149,17 +145,17 @@ namespace AuthenticationTutorial.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Students'  is null.");
             }
-            var studentModel = await _context.Students.FindAsync(id);
-            if (studentModel != null)
+            var student = await _context.Students.FindAsync(id);
+            if (student != null)
             {
-                _context.Students.Remove(studentModel);
+                _context.Students.Remove(student);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentModelExists(int id)
+        private bool StudentExists(int id)
         {
           return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
         }

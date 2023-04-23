@@ -1,7 +1,5 @@
 ﻿using AuthenticationTutorial.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Diagnostics;
 
 namespace AuthenticationTutorial.Controllers
@@ -20,7 +18,6 @@ namespace AuthenticationTutorial.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Administrator")]
         public IActionResult Privacy()
         {
             return View();

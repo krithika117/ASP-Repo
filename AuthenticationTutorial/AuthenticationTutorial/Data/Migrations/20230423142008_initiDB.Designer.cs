@@ -12,19 +12,19 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuthenticationTutorial.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230423123842_initial_dbset")]
-    partial class initial_dbset
+    [Migration("20230423142008_initiDB")]
+    partial class initiDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.14")
+                .HasAnnotation("ProductVersion", "6.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("AuthenticationTutorial.Models.StudentModel", b =>
+            modelBuilder.Entity("AuthenticationTutorial.Models.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
