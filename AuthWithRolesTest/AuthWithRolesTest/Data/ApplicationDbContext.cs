@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AuthWithRolesTest.Models;
 
 namespace AuthWithRolesTest.Data
 {
@@ -9,5 +10,6 @@ namespace AuthWithRolesTest.Data
             : base(options)
         {
         }
+        public DbSet<NotesModel> NotesModel { get; set; }
     }
 }
