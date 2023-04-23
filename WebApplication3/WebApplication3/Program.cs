@@ -1,4 +1,4 @@
-namespace JobPortal
+namespace WebApplication3
 {
     public class Program
     {
@@ -10,8 +10,6 @@ namespace JobPortal
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-
-            Connection.Init(app.Configuration.GetConnectionString("jobDBK"));
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
