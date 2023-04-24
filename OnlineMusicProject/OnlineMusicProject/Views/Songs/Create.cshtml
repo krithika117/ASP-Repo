@@ -4,37 +4,40 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Song</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    
+    <div class="col-md-6">
+        <h1>Create</h1>
+
+    <hr />
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Artist" class="control-label"></label>
-                <input asp-for="Artist" class="form-control" />
-                <span asp-validation-for="Artist" class="text-danger"></span>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control my-2" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Artist" class="control-label"></label>
+                    <input asp-for="Artist" class="form-control my-2" />
+                    <span asp-validation-for="Artist" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
+                <input asp-for="Year" class="form-control my-2" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
-                @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "Select... ", new{@class="form-control"})
+                @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "Select... ", new{@class="form-control my-2 dropdown-menu-dark"})
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="YouTubeLink" class="control-label"></label>
-                <input asp-for="YouTubeLink" class="form-control" />
+                <input asp-for="YouTubeLink" class="form-control my-2" />
                 <span asp-validation-for="YouTubeLink" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,10 +47,12 @@
     </div>
 </div>
 
-<div>
+<div class="text-center my-4">
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

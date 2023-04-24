@@ -11,6 +11,7 @@ using OnlineMusicProject.Models;
 
 namespace OnlineMusicProject.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class SongsController : Controller
     {
         private readonly ApplicationDbContext _context;
