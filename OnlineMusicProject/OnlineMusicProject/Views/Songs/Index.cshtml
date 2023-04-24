@@ -1,0 +1,32 @@
+﻿<h1>Index</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+
+<div id="search-res">
+    @await Html.PartialAsync("_SongList", Model, new ViewDataDictionary(ViewData) {{ "SearchResults", ViewBag.SearchResults }})
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            $('#search').on('input', function () {
+                var searchQuery = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("Search", "Songs")',
+                    type: 'GET',
+                    data: { search: searchQuery },
+                    success: function (result) {
+                        $('#search-res').html(result);
+                    }
+                });
+            });
+        });
+    </script>
+}
