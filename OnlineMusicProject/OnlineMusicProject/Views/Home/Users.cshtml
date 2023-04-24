@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+<h2 class="py-2">Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in UserManager.Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
