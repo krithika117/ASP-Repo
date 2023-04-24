@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
 
 :root {
     --primary-color: #1DB954;
@@ -26,7 +26,7 @@ body {
     color: white !important;
     background-color: var(--secondary-color);
     color: var(--text-color);
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin-bottom: 60px;
 }
 
@@ -55,9 +55,18 @@ a {
     transition: background-color 0.2s ease-in-out;
 }
 
-    .btn:hover {
-        background-color: #1DB954c2;
+.card {
+    background-color: var(--primary-color);
+    color: black!important;
+}
+
+    .card a {
+        color: black !important;
     }
+
+.btn:hover {
+    background-color: #1DB954c2;
+}
 
 .dropdown-menu-dark {
     background-color: #343a40;
@@ -65,4 +74,8 @@ a {
 
 .dropdown-item-dark {
     color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight:bold;
 }

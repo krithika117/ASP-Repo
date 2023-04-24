@@ -1,54 +1,24 @@
-﻿@model IEnumerable<OnlineMusicProject.Models.Song>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Artist)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YouTubeLink)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.Title
-                </td>
-                <td>
-                    @item.Artist
-                </td>
-                <td>
-                    @item.Year
-                </td>
-                <td>
-                    @item.Genre
-                </td>
-                <td>
-                    @item.YouTubeLink
-                </td>
-                <td>
+﻿<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 my-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title<a href="@item.YouTubeLink" target="_blank" class="btn btn-primary">▶</a></h5>
+                    <p class="card-text">@item.Artist</p>    <p class="card-text">@item.Genre</p>
+                    <p class="card-text">@item.Year</p>
+                 
+                    
+                </div>
+                <div class="card-footer">
                     @if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     }
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
