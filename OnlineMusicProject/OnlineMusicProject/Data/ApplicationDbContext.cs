@@ -11,6 +11,7 @@ namespace OnlineMusicProject.Data
         {
         }
         public DbSet<Song> Songs { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
     }
 }

@@ -96,6 +96,8 @@ namespace OnlineMusicProject.Controllers
             }
 
             var song = await _context.Songs.FindAsync(id);
+            var genres = _context.Genres.ToList();
+            ViewBag.Genres = new SelectList(genres, "Name", "Name");
             if (song == null)
             {
                 return NotFound();
