@@ -16,6 +16,11 @@ namespace OnlineMusicProject.Controllers
         public IActionResult Index()
         {
             return View();
+        } 
+        
+        public IActionResult Users()
+        {
+            return View();
         }
 
         public IActionResult Privacy()
