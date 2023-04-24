@@ -7,7 +7,14 @@
     </p>
 }
 
-<input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+<div class="row">
+    <div class="col-md-4">
+        @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "Select genre", new {@class="form-control"})
+    </div>
+    <div class="col-md-8">
+        <input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+    </div>
+</div>
 
 <div id="search-res">
     @await Html.PartialAsync("_SongList", Model, new ViewDataDictionary(ViewData) {{ "SearchResults", ViewBag.SearchResults }})
@@ -16,17 +23,35 @@
 @section scripts {
     <script>
         $(function () {
-            $('#search').on('input', function () {
+            $('#search').on('input change', function () {
                 var searchQuery = $(this).val();
+                var selectedGenre = $("#Genre").val();
                 $.ajax({
                     url: '@Url.Action("Search", "Songs")',
                     type: 'GET',
-                    data: { search: searchQuery },
+                    data: { search: searchQuery, genre: selectedGenre },
                     success: function (result) {
                         $('#search-res').html(result);
                     }
                 });
             });
         });
+
+        $(function () {
+            $('#Genre').on('change', function () {
+                var searchQuery = $('#search').val();
+                var selectedGenre = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("Search", "Songs")',
+                    type: 'GET',
+                    data: { search: searchQuery, genre: selectedGenre },
+                    success: function (result) {
+                        $('#search-res').html(result);
+                    }
+                });
+            });
+        });
+
+
     </script>
 }

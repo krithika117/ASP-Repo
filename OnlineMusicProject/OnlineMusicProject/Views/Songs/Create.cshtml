@@ -29,14 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
-                <select class="form-control" id="genre" name="genre" asp-for="Genre">
-                    <option value="Romance">Romance</option>
-                    <option value="Sad">Sad</option>
-                    <option value="Happy">Happy</option>
-                    <option value="Upbeat">Upbeat</option>
-                    <option value="Relaxing">Relaxing</option>
-                </select>
-
+                @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "Select... ", new{@class="form-control"})
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">

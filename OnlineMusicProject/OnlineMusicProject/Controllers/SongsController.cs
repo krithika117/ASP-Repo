@@ -23,7 +23,9 @@ namespace OnlineMusicProject.Controllers
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-              return _context.Songs != null ? 
+            var genres = _context.Genres.ToList();
+            ViewBag.Genres = new SelectList(genres, "Name", "Name");
+            return _context.Songs != null ? 
                           View(await _context.Songs.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Songs'  is null.");
         }
@@ -47,7 +49,7 @@ namespace OnlineMusicProject.Controllers
         }
 
 
-        public IActionResult Search(string search)
+        public IActionResult Search(string search, string genre)
         {
             Console.WriteLine(search);
             var songs = from s in _context.Songs
@@ -58,14 +60,22 @@ namespace OnlineMusicProject.Controllers
                 songs = songs.Where(s => s.Title.Contains(search) || s.Artist.Contains(search));
             }
 
-            return PartialView("_SongList", songs.ToList());
-        }
+            if (!string.IsNullOrEmpty(genre))
+            {
+                songs = songs.Where(s => s.Genre == genre);
+            }
 
+            ViewBag.SearchResults = songs.ToList();
+            ViewBag.Genres = new SelectList(_context.Genres, "Name", "Name");
+            return PartialView("_SongList", ViewBag.SearchResults);
+        }
 
         [Authorize(Roles="Admin")]
         // GET: Songs/Create
         public IActionResult Create()
         {
+            var genres = _context.Genres.ToList();
+            ViewBag.Genres = new SelectList(genres, "Name", "Name");
             return View();
         }
 
