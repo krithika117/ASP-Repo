@@ -1,18 +1,20 @@
 ﻿<h1>Index</h1>
 
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
+
 
 <div class="row">
     <div class="col-md-4">
         @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "All genre", new {@class="form-control"})
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
         <input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
+    </div>
+    <div class="col-md-2">
+        @if (User.IsInRole("Admin"))
+        {
+                <a asp-action="Create" class="btn text-dark">+ Add New</a>
+            
+        }
     </div>
 </div>
 

@@ -4,50 +4,51 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="row justify-content-center">
 
-<h4>Song</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
+        <h1>Edit</h1>
+
+        <hr />
+
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            <div class="form-group  my-2">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Artist" class="control-label"></label>
                 <input asp-for="Artist" class="form-control" />
                 <span asp-validation-for="Artist" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Year" class="control-label"></label>
                 <input asp-for="Year" class="form-control" />
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="Genre" class="control-label"></label>
                     @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "Select... ", new{@class="form-control"})
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <label asp-for="YouTubeLink" class="control-label"></label>
                 <input asp-for="YouTubeLink" class="form-control" />
                 <span asp-validation-for="YouTubeLink" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group my-2">
                 <input type="submit" value="Save" class="btn btn-primary" />
+         
+                <a asp-action="Index" class="btn">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -2,21 +2,21 @@
     @foreach (var item in Model)
     {
         <div class="col-md-4 my-3">
-            <div class="card shadow">
+            <div class="card shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">@item.Title<a href="@item.YouTubeLink" target="_blank" class="btn btn-primary">▶</a></h5>
-                    <p class="card-text">@item.Artist</p>    <p class="card-text">@item.Genre</p>
+                    <p class="card-text">@item.Artist</p>    
+                    <p class="card-text">@item.Genre</p>
                     <p class="card-text">@item.Year</p>
-                 
                     
                 </div>
-                <div class="card-footer">
+                <div class="card-footer bg-dark">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-tertiary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                     }
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+              @*      <a asp-action="Details" asp-route-id="@item.Id">Details</a>*@
                 </div>
             </div>
         </div>
