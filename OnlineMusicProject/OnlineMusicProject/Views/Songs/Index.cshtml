@@ -1,10 +1,19 @@
-﻿<h1>Index</h1>
+﻿
 
 
+@if (!User.IsInRole("Admin"))
+{
+    <h2 class="py-5">What would you like to listen today?</h2>
+}
+else
+{
+    <h2 class ="py-5">Admin Controls</h2>
+
+}
 
 <div class="row">
     <div class="col-md-4">
-        @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "All genre", new {@class="form-control"})
+        @Html.DropDownList("Genre", (IEnumerable<SelectListItem>)ViewBag.Genres, "All genres", new {@class="form-control"})
     </div>
     <div class="col-md-6">
         <input type="text" class="form-control" id="search" name="search" placeholder="Search by letter...">
