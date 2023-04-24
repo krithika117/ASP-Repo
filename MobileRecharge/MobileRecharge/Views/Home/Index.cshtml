@@ -6,3 +6,69 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+<script>
+    const tour = new Shepherd.Tour({
+        defaultStepOptions: {
+            cancelIcon: {
+                enabled: true
+            },
+            scrollTo: { behavior: 'smooth', block: 'center' }
+        }
+    });
+
+    tour.addStep({
+        title: 'Register Account',
+        text: `You Can Register Either In Admin / User Role Here`,
+        attachTo: {
+            element: '.register',
+            on: 'bottom'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.next();
+                },
+                text: 'Next'
+            }
+        ],
+        id: 'register-help',
+        showOn: ()=> Boolean(document.querySelector(".register"))
+    });
+
+    tour.addStep({
+        title: 'Login Account',
+        text: `You Can Login your account here for both admin and user roles`,
+        attachTo: {
+            element: '.login',
+            on: 'right'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.complete();
+                },
+                text: 'Done'
+            }
+        ],
+        id: 'login-help',
+        showOn: () => Boolean(document.querySelector(".login"))
+    });
+
+    tour.start();
+</script>

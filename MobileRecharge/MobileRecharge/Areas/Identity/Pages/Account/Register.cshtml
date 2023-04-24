@@ -18,7 +18,7 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                @Html.DropDownList("Input.Role", (IEnumerable<SelectListItem>)ViewData["Roles"], "Select... ", new{@class="form-control"})
+                @Html.DropDownList("Input.Role", (IEnumerable<SelectListItem>)ViewData["Roles"], "Select... ", new{@class="form-control role-select"})
                 <label asp-for="Input.Role"></label>
                 <span asp-validation-for="Input.Role" class="text-danger"></span>
             </div>
@@ -71,3 +71,61 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+    const tour = new Shepherd.Tour({
+        defaultStepOptions: {
+            cancelIcon: {
+                enabled: true
+            },
+            scrollTo: { behavior: 'smooth', block: 'center' }
+        }
+    });
+
+    tour.addStep({
+        title: 'Role Selection',
+        text: `You Can Select Your Role From Here`,
+        attachTo: {
+            element: '.role-select',
+            on: 'right'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.cancel();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Close'
+            },
+            
+        ],
+        id: 'role-help'
+    });
+
+    tour.addStep({
+        title: 'Login Account',
+        text: `You Can Login your account here for both admin and user roles`,
+        attachTo: {
+            element: '.login',
+            on: 'right'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.complete();
+                },
+                text: 'Done'
+            }
+        ],
+        id: 'role-help-1'
+    });
+
+    tour.start();
+</script>

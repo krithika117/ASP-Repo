@@ -8,9 +8,12 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="new-plans"> Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -29,7 +32,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
-            <th></th>
+            <th class="payment">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -58,7 +61,7 @@
                 <a asp-action = "Delete" asp-route-id = "@item.Id"> Delete </a>
                 }
                 else{
-                        <form method="post" asp-controller="MobilePlans" asp-action="Index" asp-route-id="@item.Id">
+                        <form method="post" asp-controller="MobilePlans" asp-action="Index" asp-route-id="@item.Id" >
                             <button type="submit">Recharge</button>
                         </form>
                 }
@@ -67,3 +70,63 @@
 }
     </tbody>
 </table>
+
+
+<script>
+    const tour = new Shepherd.Tour({
+        defaultStepOptions: {
+            cancelIcon: {
+                enabled: true
+            },
+            scrollTo: { behavior: 'smooth', block: 'center' }
+        }
+    });
+
+    tour.addStep({
+        title: 'Create New Plans Here',
+        text: `You Can Create new mobile plans here`,
+        attachTo: {
+            element: '.new-plans',
+            on: 'right'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.cancel();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Close'
+            },
+        ],
+        id: 'plans-add-help',
+        showOn: () => Boolean(document.querySelector(".new-plans"))
+    });
+
+    tour.addStep({
+        title: 'You Can Recharge Here',
+        text: `If You like the plan then click this button to recharge it`,
+        attachTo: {
+            element: '.payment',
+            on: 'bottom'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.next();
+                },
+                text: 'Next'
+            }
+        ],
+        id: 'recharge-add-help',
+        showOn: () => Boolean(document.querySelector(".recharge"))
+    });
+
+    tour.start();
+</script>
