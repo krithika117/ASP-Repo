@@ -58,7 +58,9 @@
                 <a asp-action = "Delete" asp-route-id = "@item.Id"> Delete </a>
                 }
                 else{
-                <a asp-action="Recharge" asp-route-id="@item.Id">Recharge</a>
+                        <form method="post" asp-controller="MobilePlans" asp-action="Index" asp-route-id="@item.Id">
+                            <button type="submit">Recharge</button>
+                        </form>
                 }
             </td>
         </tr>

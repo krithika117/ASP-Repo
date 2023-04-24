@@ -34,25 +34,6 @@ namespace MobileRecharge.Controllers
                           Problem("Entity set 'ApplicationDbContext.MobilePlans'  is null.");
         }
 
-        // POST: Create Payment
-        [Authorize(Roles = "User")]
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePayment([Bind("UserId, PlanId")] Recharge recharge)
-        {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            recharge.UserId = user.UserName;
-            if (ModelState.IsValid)
-            {
-
-                _context.Add(recharge);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(recharge);
-        }
-
         
 
         // GET: MobilePlans/Details/5
@@ -96,6 +77,26 @@ namespace MobileRecharge.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(mobilePlan);
+        } 
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var plan = await _context.MobilePlans.FindAsync(id);
+
+            var recharge = new Recharge
+            {
+                PlanId = plan.Id,
+                UserId = user.Id
+            };
+            _context.Recharge.Add(recharge);
+            await _context.SaveChangesAsync();
+
+            
+            return RedirectToAction("Index");
+
         }
 
         [Authorize(Roles = "Admin")]
