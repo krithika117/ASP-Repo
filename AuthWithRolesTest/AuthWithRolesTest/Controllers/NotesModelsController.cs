@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AuthWithRolesTest.Data;
 using AuthWithRolesTest.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthWithRolesTest.Controllers
 {
@@ -38,28 +39,33 @@ namespace AuthWithRolesTest.Controllers
         // GET: NotesModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.NotesModel == null)
+          if (id == null)
             {
                 return NotFound();
             }
 
             var notesModel = await _context.NotesModel
-                .Include(n => n.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notesModel == null)
             {
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (notesModel.UserId != user.Email)
+            {
+                return Forbid();
+            }
+
             return View(notesModel);
         }
-
+        [Authorize(Roles = "Manager, Member")]
         // GET: NotesModels/Create
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Roles = "Manager, Member")]
         // POST: NotesModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,7 +88,7 @@ namespace AuthWithRolesTest.Controllers
         // GET: NotesModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.NotesModel == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -92,13 +98,18 @@ namespace AuthWithRolesTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notesModel.UserId);
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (notesModel.UserId != user.UserName)
+            {
+                return Forbid();
+            }
+
             return View(notesModel);
         }
 
         // POST: NotesModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager, Member")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,UserId")] NotesModel notesModel)
@@ -112,6 +123,14 @@ namespace AuthWithRolesTest.Controllers
             {
                 try
                 {
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    if (notesModel.UserId != user.Email)
+                    {
+                        return Forbid();
+                    }
+
+                    //notesModel.UserId = user.Email;
+
                     _context.Update(notesModel);
                     await _context.SaveChangesAsync();
                 }
@@ -128,7 +147,6 @@ namespace AuthWithRolesTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", notesModel.UserId);
             return View(notesModel);
         }
 
