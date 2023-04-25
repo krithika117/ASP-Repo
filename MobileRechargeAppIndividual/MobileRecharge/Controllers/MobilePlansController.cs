@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
+using MailKit.Net.Smtp;
 using MobileRecharge.Data;
 using MobileRecharge.Data.Migrations;
 using MobileRecharge.Models;
@@ -207,7 +210,40 @@ namespace MobileRecharge.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult SendMail()
+        {
+            return View(new EnquiryMail());
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> SendMail(EnquiryMail model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(user.Email, user.Email));
+                message.To.Add(new MailboxAddress("Admin", "promote.n0replymailer@gmail.com"));
+                message.Subject = model.Subject;
+                message.Body = new TextPart("plain")
+                {
+                    Text = model.Body
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    await client.ConnectAsync("smtp.gmail.com", 587, false);
+                    await client.AuthenticateAsync("promote.n0replymailer@gmail.com", "ashqtcouelkfiznr");
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+
+                ViewBag.Message = "Email sent!";
+            }
+
+            return View(model);
+        }
         private bool MobilePlanExists(int id)
         {
           return (_context.MobilePlans?.Any(e => e.Id == id)).GetValueOrDefault();
