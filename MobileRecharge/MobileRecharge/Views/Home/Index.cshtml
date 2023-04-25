@@ -70,5 +70,57 @@
         showOn: () => Boolean(document.querySelector(".login"))
     });
 
+    tour.addStep({
+        title: 'Mobile Plans',
+        text: `All the mobile plans are listed here`,
+        attachTo: {
+            element: '.pay-link',
+            on: 'right'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.next();
+                },
+                text: 'Next'
+            }
+        ],
+        id: 'pay-help',
+        showOn: () => Boolean(document.querySelector(".pay-help"))
+    });
+
+    tour.addStep({
+        title: 'Recharge Histories',
+        text: `You Can check all your recharge history/invoice here`,
+        attachTo: {
+            element: '.recharge-link',
+            on: 'bottom'
+        },
+        buttons: [
+            {
+                action() {
+                    return this.back();
+                },
+                classes: 'shepherd-button-secondary',
+                text: 'Back'
+            },
+            {
+                action() {
+                    return this.complete();
+                },
+                text: 'Done'
+            }
+        ],
+        id: 'rechage-link-help',
+        showOn: () => Boolean(document.querySelector(".recharge-link"))
+    });
+
     tour.start();
 </script>
