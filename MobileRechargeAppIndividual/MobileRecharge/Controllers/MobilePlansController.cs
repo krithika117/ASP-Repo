@@ -52,6 +52,23 @@ namespace MobileRecharge.Controllers
             return View();
         }
 
+        // GET: AllCustomerTransactions
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllCustomerTransactions()
+        {
+            //var recharges = await _context.Recharge
+            //    .Join(_context.MobilePlans, r => r.PlanId, mp => mp.Id, (r, mp) => new { Recharge = r, MobilePlan = mp })
+            //    .ToListAsync();
+
+            var recharges = await _context.Recharge
+                            .Join(_context.MobilePlans, r => r.PlanId, mp => mp.Id, (r, mp) => new { Recharge = r, MobilePlan = mp })
+                            .Join(_context.Users, rp => rp.Recharge.UserId, u => u.Id, (rp, u) => new { Recharge = rp.Recharge, MobilePlan = rp.MobilePlan, UserName = u.UserName })
+                            .ToListAsync();
+
+            ViewBag.allCustomerPayments = recharges;
+            return View();
+        }
+
         
 
         // GET: MobilePlans/Details/5
