@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MobileRecharge.Models.MobilePlan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceProvider)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlanName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfMonths)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfMonths)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+
+            <td>
+                @if (User.IsInRole("Admin")) {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action = "Details" asp-route-id = "@item.Id"> Details </a> 
+                    <a asp-action = "Delete" asp-route-id = "@item.Id"> Delete </a>
+                }
+                else{
+                    <form method="post" asp-controller="MobilePlans" asp-action="Index" asp-route-id="@item.Id">
+                        <button type="submit">Recharge</button>
+                    </form>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
