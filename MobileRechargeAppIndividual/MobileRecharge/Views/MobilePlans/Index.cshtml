@@ -8,7 +8,7 @@
     var user = await userManager.GetUserAsync(User);
     var phoneNumber = user?.PhoneNumber;
 }
-<div> @phoneNumber</div>
+@*<div> @phoneNumber</div>*@
 @*@if (!string.IsNullOrEmpty(phoneNumber))
 {
     <p>Phone number: @phoneNumber</p>
@@ -32,7 +32,7 @@ else
 }
 else
 {
-    <h1 class="my-3 "> <div>User Plans</div></h1>
+    <h1 class="my-4 "> <div>User Plans</div></h1>
 }
 
 <div class="row">
@@ -71,7 +71,7 @@ else
                     else
                     {
                         <form method="post" asp-controller="MobilePlans" asp-action="Index" asp-route-id="@item.Id">
-                            <button type="submit" class="btn btn-primary">Recharge</button>
+                            <button type="submit" class="btn btn-primary">COMPLETE</button>
                         </form>
                     }
                 </div>

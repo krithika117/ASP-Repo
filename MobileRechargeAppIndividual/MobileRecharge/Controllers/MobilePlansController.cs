@@ -13,6 +13,7 @@ using MailKit.Net.Smtp;
 using MobileRecharge.Data;
 using MobileRecharge.Data.Migrations;
 using MobileRecharge.Models;
+using Org.BouncyCastle.Crypto.Macs;
 
 namespace MobileRecharge.Controllers
 {
@@ -124,6 +125,7 @@ namespace MobileRecharge.Controllers
             var recharge = new Recharge
             {
                 PlanId = plan.Id,
+                DateCreated = DateTime.Now,
                 UserId = user.Id
             };
             _context.Recharge.Add(recharge);
@@ -221,10 +223,34 @@ namespace MobileRecharge.Controllers
             var mobilePlan = await _context.MobilePlans.FindAsync(id);
             if (mobilePlan != null)
             {
+                var planMention = mobilePlan.PlanName;
                 _context.MobilePlans.Remove(mobilePlan);
+                await _context.SaveChangesAsync();
+                var users = _context.Users.ToList();
+                var message = new MimeMessage();
+                message.Subject = "Plan Deleted";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Dear user,\n\nWe regret to inform you that the plan "+ planMention +" has been deleted.\n\nThank you,\nRechargify"
+                };
+
+                foreach (var user in users)
+                {
+                    message.To.Clear();
+                    message.To.Add(new MailboxAddress(user.Email, user.Email));
+                    message.From.Add(new MailboxAddress("Admin", "promote.n0replymailer@gmail.com"));
+
+                    using (var client = new SmtpClient())
+                    {
+
+                        await client.ConnectAsync("smtp.gmail.com", 587, false);
+                        await client.AuthenticateAsync("promote.n0replymailer@gmail.com", "ashqtcouelkfiznr");
+                        await client.SendAsync(message);
+                        await client.DisconnectAsync(true);
+                    }
+                    Console.WriteLine("Mail Sent");
+                }
             }
-            
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         public IActionResult SendMail()

@@ -10,6 +10,7 @@
         public String ServiceProviderUPI { get; set; }
         public string NoOfMonths { get; set; }
         public int Amount { get; set; }
+     
 
 
     }

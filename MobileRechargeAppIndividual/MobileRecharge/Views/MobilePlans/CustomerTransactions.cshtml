@@ -8,20 +8,22 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Recharge ID</th>
-                <th>Amount</th>
+@*                <th>Recharge ID</th>
+*@                <th>Amount</th>
                 <th>Plan Name</th>
                 <th>Validity</th>
+                <th>Date of Recharge</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var result in ViewBag.customerPayments)
             {
                 <tr>
-                    <td>@result.Recharge.Id</td>
-                    <td>@result.MobilePlan.Amount</td>
+@*                    <td>@result.Recharge.Id</td>
+*@                    <td>@result.MobilePlan.Amount</td>
                     <td>@result.MobilePlan.PlanName</td>
                     <td>@result.MobilePlan.NoOfMonths months</td>
+                    <td>@result.Recharge.DateCreated.ToString("dd-MM-yyyy")</td>
                 </tr>
             }
         </tbody>
