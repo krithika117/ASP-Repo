@@ -16,6 +16,11 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating my-2">
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.PhoneNumber"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-floating my-2">
                 @Html.DropDownList("Input.Role", (IEnumerable<SelectListItem>)ViewData["Roles"], "Select Role", new{@class="form-control"})
                 <label asp-for="Input.Role"></label>
                 <span asp-validation-for="Input.Role" class="text-danger"></span>

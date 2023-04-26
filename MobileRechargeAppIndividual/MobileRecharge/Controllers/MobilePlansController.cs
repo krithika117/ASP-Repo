@@ -103,7 +103,7 @@ namespace MobileRecharge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ServiceProvider,PlanName,Mode,NoOfMonths,Amount")] MobilePlan mobilePlan)
+        public async Task<IActionResult> Create([Bind("Id,ServiceProvider,PlanName,Mode,DataQuant,ServiceProviderUPI,NoOfMonths,Amount")] MobilePlan mobilePlan)
         {
             if (ModelState.IsValid)
             {

@@ -1,6 +1,25 @@
-﻿@model IEnumerable<MobileRecharge.Models.MobilePlan>
+﻿
+@model IEnumerable<MobileRecharge.Models.MobilePlan>
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
 
 @{
+    var user = await userManager.GetUserAsync(User);
+    var phoneNumber = user?.PhoneNumber;
+}
+<div> @phoneNumber</div>
+@*@if (!string.IsNullOrEmpty(phoneNumber))
+{
+    <p>Phone number: @phoneNumber</p>
+}
+else
+{
+    <p>No phone number provided</p>
+}*@
+
+@{
+
     ViewData["Title"] = "Index";
 }
 
@@ -13,7 +32,7 @@
 }
 else
 {
-    <h1 class="my-3">User Plans</h1>
+    <h1 class="my-3 "> <div>User Plans</div></h1>
 }
 
 <div class="row">
@@ -22,21 +41,21 @@ else
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">
-                    @Html.DisplayFor(modelItem => item.PlanName)
+                    @Html.DisplayFor(modelItem => item.PlanName) <b>@Html.DisplayFor(modelItem => item.DataQuant)</b>
                 </div>
                 <div class="card-body" style="display: grid; grid-template-columns: 1fr 100px; grid-gap: 10px;">
                     <div>
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ServiceProvider)</h5>
                         <p class="card-text">
                             Mode: @Html.DisplayFor(modelItem => item.Mode)<br>
-                            No. of Months: @Html.DisplayFor(modelItem => item.NoOfMonths)<br>
-                            Amount: @Html.DisplayFor(modelItem => item.Amount)
+                            Validity: @Html.DisplayFor(modelItem => item.NoOfMonths) Months<br>
+                            Amount: @Html.DisplayFor(modelItem => item.Amount)/-
                         </p>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: center;">
                         @if (!User.IsInRole("Admin"))
                         {
-                            var upiLink = "upi://pay?pa=krithikanithyanandam@okhdfcbank" + "&pn=" + item.ServiceProvider + "&am=" + item.Amount + "&cu=INR";
+                            var upiLink = "upi://pay?pa=" + item.ServiceProviderUPI + "&pn=" + item.ServiceProvider + "&am=" + item.Amount + "&cu=INR";
                             var encodedUpiLink = System.Web.HttpUtility.UrlEncode(upiLink);
                             var imageUrl = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodedUpiLink + "&amp;size=100x100&amp;bgcolor=gray";
                             <img src="@imageUrl" alt="QR Code" style="max-width:100px;" />
@@ -46,8 +65,8 @@ else
                 <div class="card-footer text-center">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary text-white">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger text-white">Delete</a>
                     }
                     else
                     {

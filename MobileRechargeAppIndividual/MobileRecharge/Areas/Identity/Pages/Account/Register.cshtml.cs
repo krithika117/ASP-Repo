@@ -28,6 +28,8 @@ namespace MobileRecharge.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
+        
+        private readonly IUserPhoneNumberStore<IdentityUser> _phoneNumberStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -85,6 +87,11 @@ namespace MobileRecharge.Areas.Identity.Pages.Account
 
             [Required]
             public string Role { get; set;  }
+            
+            [Required]
+            [Display(Name = "PhoneNumber")]
+
+            public string PhoneNumber { get; set;  }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -125,7 +132,9 @@ namespace MobileRecharge.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
