@@ -37,7 +37,7 @@ namespace MobileRecharge.Controllers
         public async Task<IActionResult> MyRecharges()
         {
             var user = await _userManager.GetUserAsync(User);
-            var applicationDbContext = _context.Recharge.Include(r => r.Plan).Where(r => r.UserId == user.Id);
+            var applicationDbContext = _context.Recharge.Include(r => r.Plan).Where(r => r.UserId == user.UserName);
             return View(await applicationDbContext.ToListAsync());
         }
 

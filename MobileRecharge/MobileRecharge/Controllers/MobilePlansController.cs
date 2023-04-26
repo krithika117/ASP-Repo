@@ -89,7 +89,7 @@ namespace MobileRecharge.Controllers
             var recharge = new Recharge
             {
                 PlanId = plan.Id,
-                UserId = user.Id
+                UserId = user.UserName,
             };
             _context.Recharge.Add(recharge);
             await _context.SaveChangesAsync();
