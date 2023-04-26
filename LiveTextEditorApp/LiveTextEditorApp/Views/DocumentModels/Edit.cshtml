@@ -1,0 +1,61 @@
+﻿@model LiveTextEditorApp.Models.DocumentModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+    <div class="container">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" class="form-control"/>
+            <input type="hidden" asp-for="UserId" class="form-control"/>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+
+
+    <script src="https://cdn.tiny.cloud/1/bmes6jer1hwluio0gcbdtnzf04rvsd3p291lrj28lcmxse5s/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'fullscreen',
+            toolbar: 'fullscreen',
+            plugins: [
+                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'prewiew', 'anchor', 'pagebreak',
+                'searchreplace', 'wordcount', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
+                'table', 'emoticons', 'template', 'codesample'
+            ],
+            toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify |' +
+                'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+                'forecolor backcolor emoticons',
+            menu: {
+                favs: { title: 'menu', items: 'code visualaid | searchreplace | emoticons' }
+            },
+            menubar: 'favs file edit view insert format tools table',
+            content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}'
+        });
+    </script>
+</body>
+</html>

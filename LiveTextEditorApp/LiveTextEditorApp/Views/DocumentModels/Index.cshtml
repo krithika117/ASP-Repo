@@ -1,0 +1,28 @@
+﻿@model IEnumerable<LiveTextEditorApp.Models.DocumentModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">@Html.DisplayFor(modelItem => item.Title)</h3>
+                    @*<p class="card-text">@Html.DisplayFor(modelItem => item.UserId)</p>*@
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-secondary">Details</a>
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
