@@ -16,64 +16,34 @@ else
     <h1 class="my-3">User Plans</h1>
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ServiceProvider)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlanName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoOfMonths)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @if (!User.IsInRole("Admin"))
-                {
-                    @Html.DisplayName("QR Code")
-                }
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceProvider)
-                </td>
-                <td>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-header">
                     @Html.DisplayFor(modelItem => item.PlanName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NoOfMonths)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
-                <td>
-                    @if (!User.IsInRole("Admin"))
-                    {
-
-                        var upiLink = "upi://pay?pa=krithikanithyanandam@okhdfcbank" + "&pn=" + item.ServiceProvider + "&am=" + item.Amount + "&cu=INR";
-                        var encodedUpiLink = System.Web.HttpUtility.UrlEncode(upiLink);
-                        var imageUrl = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodedUpiLink + "&amp;size=50x50&amp;bgcolor=gray";
-
-                        <img src="@imageUrl" alt="QR Code" />
-                    }
-                </td>
-                <td>
+                </div>
+                <div class="card-body" style="display: grid; grid-template-columns: 1fr 100px; grid-gap: 10px;">
+                    <div>
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ServiceProvider)</h5>
+                        <p class="card-text">
+                            Mode: @Html.DisplayFor(modelItem => item.Mode)<br>
+                            No. of Months: @Html.DisplayFor(modelItem => item.NoOfMonths)<br>
+                            Amount: @Html.DisplayFor(modelItem => item.Amount)
+                        </p>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            var upiLink = "upi://pay?pa=krithikanithyanandam@okhdfcbank" + "&pn=" + item.ServiceProvider + "&am=" + item.Amount + "&cu=INR";
+                            var encodedUpiLink = System.Web.HttpUtility.UrlEncode(upiLink);
+                            var imageUrl = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodedUpiLink + "&amp;size=100x100&amp;bgcolor=gray";
+                            <img src="@imageUrl" alt="QR Code" style="max-width:100px;" />
+                        }
+                    </div>
+                </div>
+                <div class="card-footer text-center">
                     @if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
@@ -85,8 +55,8 @@ else
                             <button type="submit" class="btn btn-primary">Recharge</button>
                         </form>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
