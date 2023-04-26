@@ -1,18 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700;800&display=swap');
+
+:root {
+    --primary-color: #D79922;
+    --secondary-color: #0A192F;
+    --text-color: #FFFFFF;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    color: white !important;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-family: 'Quicksand', sans-serif;
+    margin-bottom: 60px;
+}
+
+.form-control, table, select, option, input:active {
+    color: white !important;
+    background-color: #343a40 !important;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Quicksand', sans-serif;
+}
+
+.nav-link {
+    color: white !important;
+    border: none;
+    font-family: 'Quicksand', sans-serif;
+}
+
+a {
+    color: var(--primary-color);
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.card {
+    background-color: var(--primary-color);
+    color: black !important;
+}
+
+    .card a {
+        color: black !important;
+    }
+
+.btn:hover {
+    background-color: #ad6511;
+}
+
+
+.dropdown-menu-dark {
+    background-color: #343a40;
+}
+
+.dropdown-item-dark {
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: darkred;
+    color: #fff !important;
+}
+
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
 }
