@@ -26,7 +26,7 @@ namespace LiveTextEditorApp.Controllers
         }
 
         // GET: DocumentModels
-       
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -39,6 +39,7 @@ namespace LiveTextEditorApp.Controllers
 
 
         // GET: DocumentModels/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Documents == null)
@@ -80,6 +81,7 @@ namespace LiveTextEditorApp.Controllers
         }
 
         // GET: DocumentModels/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             Console.WriteLine("GET Edit");
@@ -162,6 +164,7 @@ namespace LiveTextEditorApp.Controllers
         }
 
         // GET: DocumentModels/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Documents == null)
@@ -182,6 +185,7 @@ namespace LiveTextEditorApp.Controllers
         // POST: DocumentModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Documents == null)
