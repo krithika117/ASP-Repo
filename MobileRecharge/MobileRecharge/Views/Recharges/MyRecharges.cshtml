@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MobileRecharge.Models.Recharge>
+
+@{
+    ViewData["Title"] = "My Recharges";
+}
+
+<h1>My Recharges</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Plan)
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>Service Provider</th>
+            <th>Payment Mode</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plan.PlanName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plan.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plan.ServiceProvider)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plan.Mode)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

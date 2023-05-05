@@ -8,123 +8,107 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MobileRecharge.Data;
-using MobileRecharge.Data.Migrations;
 using MobileRecharge.Models;
 
 namespace MobileRecharge.Controllers
 {
-
     [Authorize]
-    public class MobilePlansController : Controller
+    public class RechargesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public MobilePlansController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public RechargesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: MobilePlans
+        [Authorize(Roles = "Admin")]
+        // GET: Recharges
         public async Task<IActionResult> Index()
         {
-              return _context.MobilePlans != null ? 
-                          View(await _context.MobilePlans.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.MobilePlans'  is null.");
+            var applicationDbContext = _context.Recharge.Include(r => r.Plan);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        
+        [Authorize(Roles = "User")]
+        // GET: Recharges
+        public async Task<IActionResult> MyRecharges()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.Recharge.Include(r => r.Plan).Where(r => r.UserId == user.UserName);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
-        // GET: MobilePlans/Details/5
+        // GET: Recharges/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.MobilePlans == null)
+            if (id == null || _context.Recharge == null)
             {
                 return NotFound();
             }
 
-            var mobilePlan = await _context.MobilePlans
+            var recharge = await _context.Recharge
+                .Include(r => r.Plan)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (mobilePlan == null)
+            if (recharge == null)
             {
                 return NotFound();
             }
 
-            return View(mobilePlan);
+            return View(recharge);
         }
 
-        // GET: MobilePlans/Create
-        [Authorize(Roles ="Admin")]
+        // GET: Recharges/Create
         public IActionResult Create()
         {
+            ViewData["PlanId"] = new SelectList(_context.MobilePlans, "Id", "Id");
             return View();
         }
 
-        // POST: MobilePlans/Create
+        // POST: Recharges/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin")]
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ServiceProvider,PlanName,Mode,NoOfMonths,Amount")] MobilePlan mobilePlan)
+        public async Task<IActionResult> Create([Bind("Id,UserId,PlanId")] Recharge recharge)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mobilePlan);
+                _context.Add(recharge);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(mobilePlan);
-        } 
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int id)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var plan = await _context.MobilePlans.FindAsync(id);
-
-            var recharge = new Recharge
-            {
-                PlanId = plan.Id,
-                UserId = user.UserName,
-            };
-            _context.Recharge.Add(recharge);
-            await _context.SaveChangesAsync();
-
-            
-            return RedirectToAction("Index");
-
+            ViewData["PlanId"] = new SelectList(_context.MobilePlans, "Id", "Id", recharge.PlanId);
+            return View(recharge);
         }
 
-        [Authorize(Roles = "Admin")]
-        // GET: MobilePlans/Edit/5
+        // GET: Recharges/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.MobilePlans == null)
+            if (id == null || _context.Recharge == null)
             {
                 return NotFound();
             }
 
-            var mobilePlan = await _context.MobilePlans.FindAsync(id);
-            if (mobilePlan == null)
+            var recharge = await _context.Recharge.FindAsync(id);
+            if (recharge == null)
             {
                 return NotFound();
             }
-            return View(mobilePlan);
+            ViewData["PlanId"] = new SelectList(_context.MobilePlans, "Id", "Id", recharge.PlanId);
+            return View(recharge);
         }
 
-        // POST: MobilePlans/Edit/5
+        // POST: Recharges/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ServiceProvider,PlanName,Mode,NoOfMonths,Amount")] MobilePlan mobilePlan)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,PlanId")] Recharge recharge)
         {
-            if (id != mobilePlan.Id)
+            if (id != recharge.Id)
             {
                 return NotFound();
             }
@@ -133,12 +117,12 @@ namespace MobileRecharge.Controllers
             {
                 try
                 {
-                    _context.Update(mobilePlan);
+                    _context.Update(recharge);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MobilePlanExists(mobilePlan.Id))
+                    if (!RechargeExists(recharge.Id))
                     {
                         return NotFound();
                     }
@@ -149,53 +133,51 @@ namespace MobileRecharge.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(mobilePlan);
+            ViewData["PlanId"] = new SelectList(_context.MobilePlans, "Id", "Id", recharge.PlanId);
+            return View(recharge);
         }
 
-        // GET: MobilePlans/Delete/5
-        [Authorize(Roles = "Admin")]
-
+        // GET: Recharges/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.MobilePlans == null)
+            if (id == null || _context.Recharge == null)
             {
                 return NotFound();
             }
 
-            var mobilePlan = await _context.MobilePlans
+            var recharge = await _context.Recharge
+                .Include(r => r.Plan)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (mobilePlan == null)
+            if (recharge == null)
             {
                 return NotFound();
             }
 
-            return View(mobilePlan);
+            return View(recharge);
         }
 
-        // POST: MobilePlans/Delete/5
-        [Authorize(Roles = "Admin")]
-
+        // POST: Recharges/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.MobilePlans == null)
+            if (_context.Recharge == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.MobilePlans'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Recharge'  is null.");
             }
-            var mobilePlan = await _context.MobilePlans.FindAsync(id);
-            if (mobilePlan != null)
+            var recharge = await _context.Recharge.FindAsync(id);
+            if (recharge != null)
             {
-                _context.MobilePlans.Remove(mobilePlan);
+                _context.Recharge.Remove(recharge);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MobilePlanExists(int id)
+        private bool RechargeExists(int id)
         {
-          return (_context.MobilePlans?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Recharge?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
